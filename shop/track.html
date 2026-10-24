@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko" data-root="../shop/" data-site="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- sample-roastery/track.html 이식 -->
+<title data-tpl="배송 조회 | {brand}">배송 조회 | 온도 로스터스</title>
+<meta name="description" content="주문번호로 배송 상태를 확인하세요.">
+<link rel="canonical" data-tpl="{base}shop/track.html" href="https://my-site.pages.dev/shop/track.html">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/theme.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<!-- HEADER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<header class="site-header"><div class="wrap">
+  <a class="logo" href="../index.html"><span class="emoji" aria-hidden="true">☕</span><span>온도 로스터스<small>ONDO ROASTERS</small></span></a>
+  <nav class="nav" aria-label="주요 메뉴">
+    <a href="../index.html">홈</a>
+    <a href="../blog/">블로그</a>
+    <a href="../shop/">스토어</a>
+    <a href="../shop/support.html">고객센터</a>
+    <a href="../shop/track.html" class="is-current" aria-current="page">배송 조회</a>
+  </nav>
+  <div class="nav-tools">
+    <button type="button" class="cart-btn" data-cart-open aria-label="장바구니 열기"><span class="t">장바구니</span> <b data-cart-count hidden>0</b></button>
+    <button type="button" class="menu-btn" aria-label="메뉴"><span></span><span></span><span></span></button>
+  </div>
+</div></header>
+<!-- HEADER:END -->
+<main class="done">
+  <p class="eyebrow">TRACK ORDER</p>
+  <h1>내 주문은 지금 어디쯤?</h1>
+  <p style="color:var(--ink-2)">주문 완료 화면의 주문번호(예: OD261024-AB12)를 넣어 주세요.</p>
+  <form class="track-form" id="f"><input id="no" placeholder="주문번호" autocomplete="off"><button class="btn amber" type="submit">조회</button></form>
+  <div id="result" style="margin-top:36px"></div>
+  <div id="recent" style="margin-top:40px;text-align:left"></div>
+</main>
+<!-- FOOTER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<footer class="site-footer"><div class="wrap">
+  <div><div class="logo">☕ 온도 로스터스<small>ONDO ROASTERS</small></div><p style="margin-top:12px">오늘의 온도에 맞는 한 잔</p><p>hello@ondo.example · 010-0000-0000 · 평일 10:00–17:00</p><div class="sns"><a href="https://instagram.com/" target="_blank" rel="noopener">인스타그램</a></div></div>
+  <div><h4>SHOP</h4><a href="../shop/">전체 상품</a><a href="../shop/track.html">배송 조회</a><a href="../shop/support.html">고객센터 · FAQ</a></div>
+  <div><h4>STORY</h4><a href="../blog/">블로그</a><a href="../index.html#about">소개</a><a href="../index.html#contact">연락처</a><a href="../admin/" rel="nofollow">관리자</a></div>
+  <div class="copy"><span>© 2026 ONDO ROASTERS</span><span>결제·주문·재고는 브라우저 안에서만 동작하는 데모입니다</span></div>
+</div></footer>
+<script src="../shop/data.js"></script>
+<script src="../shop/shop.js"></script>
+<!-- FOOTER:END -->
+<script>
+(function(){
+  var STEPS = ['paid','preparing','shipped','delivered'];
+  function show(no){
+    var o = SHOP.order(no.trim().toUpperCase()), r = document.getElementById('result');
+    if (!o) { r.innerHTML = '<p class="stock-note out">주문번호를 찾을 수 없어요. 이 브라우저에서 주문한 건만 조회되는 데모입니다.</p>'; return; }
+    var idx = STEPS.indexOf(o.status);
+    var tl = o.status === 'cancelled' ? '<p class="stock-note out" style="font-size:15px">취소된 주문입니다.</p>' :
+      '<div class="timeline">'+STEPS.map(function(s,i){ return '<div class="'+(i<idx?'done-step':i===idx?'done-step current':'')+'">'+SHOP.STATUS[s]+'</div>'; }).join('')+'</div>';
+    var hist = o.history.map(function(h){ return '<div class="summary-line"><span>'+SHOP.STATUS[h.status]+'</span><small>'+new Date(h.at).toLocaleString('ko-KR')+'</small></div>'; }).join('');
+    r.innerHTML = '<div class="order-box"><dl><dt>주문번호</dt><dd>'+o.no+'</dd><dt>상품</dt><dd>'+o.items.map(function(i){return SHOP.esc(i.name)+' × '+i.q;}).join('<br>')+'</dd><dt>받는 분</dt><dd>'+SHOP.esc(o.customer.name)+'</dd>'+(o.memo?'<dt>안내</dt><dd>'+SHOP.esc(o.memo)+'</dd>':'')+'</dl>'+tl+'<h3 style="font-family:var(--sans);font-size:14px;margin:10px 0 4px">진행 기록</h3>'+hist+'</div>';
+  }
+  var q = new URLSearchParams(location.search).get('no'); if (q) { document.getElementById('no').value = q; show(q); }
+  document.getElementById('f').addEventListener('submit', function(e){ e.preventDefault(); show(document.getElementById('no').value); });
+  var recent = SHOP.orders().slice(0,5);
+  if (recent.length) document.getElementById('recent').innerHTML = '<p class="eyebrow">이 브라우저의 최근 주문</p>' + recent.map(function(o){ return '<div class="summary-line"><a href="?no='+o.no+'" style="font-weight:700">'+o.no+'</a><span>'+SHOP.STATUS[o.status]+' · '+SHOP.won(o.total)+'</span></div>'; }).join('');
+})();
+</script>
+</body>
+</html>

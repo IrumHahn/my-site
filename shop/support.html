@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko" data-root="../shop/" data-site="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- sample-roastery/support.html 이식 — 규칙 기반 상담봇 · FAQ · 1:1 문의 -->
+<title data-tpl="고객센터 · FAQ · 1:1 문의 | {brand}">고객센터 · FAQ · 1:1 문의 | 온도 로스터스</title>
+<meta name="description" data-tpl="{brand} 고객센터. 배송·교환·환불 등 자주 묻는 질문과 1:1 문의." content="온도 로스터스 고객센터. 배송·교환·환불 등 자주 묻는 질문과 1:1 문의.">
+<link rel="canonical" data-tpl="{base}shop/support.html" href="https://my-site.pages.dev/shop/support.html">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/theme.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script type="application/ld+json" id="faq-ld"></script>
+</head>
+<body>
+<!-- HEADER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<header class="site-header"><div class="wrap">
+  <a class="logo" href="../index.html"><span class="emoji" aria-hidden="true">☕</span><span>온도 로스터스<small>ONDO ROASTERS</small></span></a>
+  <nav class="nav" aria-label="주요 메뉴">
+    <a href="../index.html">홈</a>
+    <a href="../blog/">블로그</a>
+    <a href="../shop/">스토어</a>
+    <a href="../shop/support.html" class="is-current" aria-current="page">고객센터</a>
+    <a href="../shop/track.html">배송 조회</a>
+  </nav>
+  <div class="nav-tools">
+    <button type="button" class="cart-btn" data-cart-open aria-label="장바구니 열기"><span class="t">장바구니</span> <b data-cart-count hidden>0</b></button>
+    <button type="button" class="menu-btn" aria-label="메뉴"><span></span><span></span><span></span></button>
+  </div>
+</div></header>
+<!-- HEADER:END -->
+
+<main class="wrap section" style="padding-top:48px">
+  <p class="eyebrow">SUPPORT</p>
+  <h1 class="section-title">무엇이든 물어보세요</h1>
+  <p class="section-lead">대부분은 아래 상담봇이 바로 답합니다. 못 푸는 건 1:1 문의로 남기면 영업일 기준 하루 안에 답합니다.</p>
+
+  <div class="support-grid" style="margin-top:36px">
+    <div>
+      <div class="chat" id="chat">
+        <div class="chat-head"><i></i> <span id="botName">AI 상담</span> <span style="font-weight:500;color:var(--ink-2);font-size:12px">· 상품·배송·정책 즉답</span></div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-quick" id="quick"></div>
+        <form class="chat-form" id="chatForm"><input id="chatIn" placeholder="예: 배송 얼마나 걸려요? / 주문번호 입력" autocomplete="off"><button class="btn sm" type="submit">보내기</button></form>
+      </div>
+      <p class="demo-note" style="margin-top:12px">이 상담봇은 상품 데이터(products.json)·FAQ·주문 기록을 읽어 답하는 <b>규칙 기반 데모</b>입니다. 실서비스에서는 같은 자료를 Claude/GPT API에 넘겨 자연어로 답하게 만듭니다.</p>
+
+      <section class="faq" style="margin-top:44px" id="faq">
+        <p class="eyebrow">FAQ</p>
+        <!-- FAQ 는 data.js 에서 렌더 (정적 복사본은 llms.txt, 홈에 있음) -->
+      </section>
+    </div>
+
+    <aside>
+      <section class="panel">
+        <h2>1:1 문의</h2>
+        <form id="inqForm">
+          <div class="field"><label>문의 유형</label><select id="iType"><option value="order">주문·배송</option><option value="product">상품·추천</option><option value="exchange">교환·환불</option><option value="etc">기타</option></select></div>
+          <div class="field"><label for="iName">이름</label><input id="iName" required></div>
+          <div class="field"><label for="iContact">연락처 (휴대폰 또는 이메일)</label><input id="iContact" required></div>
+          <div class="field"><label for="iOrder">주문번호 (있다면)</label><input id="iOrder" placeholder="OD261024-AB12"></div>
+          <div class="field"><label for="iMsg">내용</label><textarea id="iMsg" required></textarea></div>
+          <button type="submit" class="btn block">문의 남기기</button>
+        </form>
+        <div id="inqDone" hidden style="text-align:center;padding:20px 0"><p class="stock-note ok" style="font-size:15px">접수됐어요. 영업일 기준 하루 안에 답변드릴게요.</p><p style="font-size:13px;color:var(--ink-2)">답변은 <a href="../admin/" style="text-decoration:underline">관리자 페이지</a>에서 달아볼 수 있어요 (데모).</p></div>
+      </section>
+      <section class="panel">
+        <h2>내 문의 · 답변</h2>
+        <div id="myInq" style="font-size:14px"></div>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<!-- FOOTER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<footer class="site-footer"><div class="wrap">
+  <div><div class="logo">☕ 온도 로스터스<small>ONDO ROASTERS</small></div><p style="margin-top:12px">오늘의 온도에 맞는 한 잔</p><p>hello@ondo.example · 010-0000-0000 · 평일 10:00–17:00</p><div class="sns"><a href="https://instagram.com/" target="_blank" rel="noopener">인스타그램</a></div></div>
+  <div><h4>SHOP</h4><a href="../shop/">전체 상품</a><a href="../shop/track.html">배송 조회</a><a href="../shop/support.html">고객센터 · FAQ</a></div>
+  <div><h4>STORY</h4><a href="../blog/">블로그</a><a href="../index.html#about">소개</a><a href="../index.html#contact">연락처</a><a href="../admin/" rel="nofollow">관리자</a></div>
+  <div class="copy"><span>© 2026 ONDO ROASTERS</span><span>결제·주문·재고는 브라우저 안에서만 동작하는 데모입니다</span></div>
+</div></footer>
+<script src="../shop/data.js"></script>
+<script src="../shop/shop.js"></script>
+<!-- FOOTER:END -->
+<script>
+(function(){
+  var D = SHOP.data();
+  document.getElementById('botName').textContent = D.brand.name + ' 상담';
+  /* FAQ 렌더 + FAQPage JSON-LD */
+  document.getElementById('faq').insertAdjacentHTML('beforeend', D.faq.map(function(f){ return '<details><summary>'+SHOP.esc(f.q)+'</summary><p>'+SHOP.esc(f.a)+'</p></details>'; }).join(''));
+  document.getElementById('faq-ld').textContent = JSON.stringify({ '@context':'https://schema.org','@type':'FAQPage','mainEntity': D.faq.map(function(f){ return {'@type':'Question','name':f.q,'acceptedAnswer':{'@type':'Answer','text':f.a}}; }) });
+
+  /* ---- 상담봇 (규칙 기반 데모) ---- */
+  var body = document.getElementById('chatBody');
+  function say(html, me){ var m = document.createElement('div'); m.className = 'msg ' + (me?'me':'bot'); m.innerHTML = html; body.appendChild(m); body.scrollTop = body.scrollHeight; }
+  function norm(s){ return String(s).toLowerCase().replace(/\s+/g,''); }
+  function answer(q){
+    var t = norm(q);
+    // 1) 주문번호 → 배송 상태
+    var m = q.toUpperCase().match(/[A-Z]{2}\d{6}-[A-Z0-9]{4}/);
+    if (m) { var o = SHOP.order(m[0]); return o ? '주문 <b>'+o.no+'</b>은 지금 <b>'+SHOP.STATUS[o.status]+'</b> 상태예요. <a href="track.html?no='+o.no+'">배송 조회 →</a>' : '그 주문번호는 찾지 못했어요. 이 브라우저에서 주문한 건만 조회되는 데모예요.'; }
+    // 2) 상품 이름 → 재고·가격
+    for (var i=0;i<D.products.length;i++){ var p = D.products[i];
+      var keys = [p.name].concat(p.name.split(/[·\s]+/), (p.sub||'').split(/[·\s]+/)).map(norm).filter(function(k){ return k.length>=2; });
+      for (var k=0;k<keys.length;k++){ if (t.indexOf(keys[k])>-1) { var st = SHOP.stockOf(p.id);
+        return '<b>'+SHOP.esc(p.name)+'</b>은 '+SHOP.won(p.price)+(p.unit||'')+'이고, '+(st<=0?'지금은 <b>품절</b>이에요.':st<=5?'<b>'+st+'개</b>만 남았어요.':'바로 주문하실 수 있어요.')+(p.tags&&p.tags.length?' 특징은 '+p.tags.join(', ')+'.':'')+' <a href="products/'+p.id+'.html">상품 보기 →</a>'; } } }
+    // 3) 질문 단어가 FAQ 질문과 겹치면 그 답
+    var best = null, bestN = 0;
+    D.faq.forEach(function(f){ var n = 0; f.q.replace(/[?.,]/g,'').split(/\s+/).forEach(function(w){ var k = norm(w); if (k.length>=2 && t.indexOf(k)>-1) n++; }); if (n>bestN){ bestN=n; best=f; } });
+    if (best) return SHOP.esc(best.a);
+    if (/배송비|무료배송/.test(t)) return SHOP.won(D.brand.freeShipping)+' 이상 주문은 배송비가 무료이고, 그 미만은 '+SHOP.won(D.brand.shippingFee)+'이에요.';
+    if (/추천|처음|입문|뭐가/.test(t)) { var f0 = D.products.filter(function(p){ return p.featured; })[0]; if (f0) return '처음이라면 <a href="products/'+f0.id+'.html"><b>'+SHOP.esc(f0.name)+'</b></a>('+SHOP.won(f0.price)+')을 가장 많이 고르세요.'; }
+    return '제가 바로 답하기 어려운 질문이에요. 오른쪽 <b>1:1 문의</b>에 남겨 주시면 영업일 기준 하루 안에 답할게요. 상품 이름이나 주문번호를 넣어 다시 물어보셔도 돼요.';
+  }
+  var quick = ['배송 얼마나 걸려요?','처음인데 뭐가 좋아요?','교환·환불은 어떻게 하나요?','배송비는 얼마예요?'];
+  document.getElementById('quick').innerHTML = quick.map(function(q){ return '<button type="button">'+q+'</button>'; }).join('');
+  document.getElementById('quick').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; ask(b.textContent); });
+  function ask(q){ say(SHOP.esc(q), true); setTimeout(function(){ say(answer(q)); }, 350); }
+  document.getElementById('chatForm').addEventListener('submit', function(e){ e.preventDefault(); var v = document.getElementById('chatIn').value.trim(); if (!v) return; document.getElementById('chatIn').value=''; ask(v); });
+  say('안녕하세요, '+SHOP.esc(D.brand.name)+'예요. 상품·재고·배송·정책에 대해 물어보세요. 주문번호를 넣으면 배송 상태도 알려드려요.');
+
+  /* ---- 1:1 문의 ---- */
+  function paintMine(){ var l = SHOP.inquiries().filter(function(q){ return q.type !== 'restock'; }).slice(0,5); document.getElementById('myInq').innerHTML = l.length ? l.map(function(q){ return '<div class="summary-line" style="flex-direction:column;align-items:stretch"><span><b>'+SHOP.esc(q.message)+'</b><small>'+new Date(q.at).toLocaleString('ko-KR')+' · '+(q.status==='done'?'<span class="stock-note ok">답변 완료</span>':'<span class="stock-note">답변 대기</span>')+'</small></span>'+(q.answer?'<span style="margin-top:6px;padding:10px;background:var(--paper-2);border-radius:6px">'+SHOP.esc(q.answer)+'</span>':'')+'</div>'; }).join('') : '<p style="color:var(--ink-2)">아직 남긴 문의가 없어요.</p>'; }
+  paintMine();
+  document.getElementById('inqForm').addEventListener('submit', function(e){ e.preventDefault();
+    SHOP.addInquiry({ type: document.getElementById('iType').value, name: document.getElementById('iName').value.trim(), contact: document.getElementById('iContact').value.trim(), orderNo: document.getElementById('iOrder').value.trim(), message: document.getElementById('iMsg').value.trim() });
+    document.getElementById('inqForm').hidden = true; document.getElementById('inqDone').hidden = false; paintMine(); });
+})();
+</script>
+</body>
+</html>

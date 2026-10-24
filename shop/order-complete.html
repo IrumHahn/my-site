@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko" data-root="../shop/" data-site="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- sample-roastery/order-complete.html 이식 -->
+<title data-tpl="주문 완료 | {brand}">주문 완료 | 온도 로스터스</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/theme.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<!-- HEADER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<header class="site-header"><div class="wrap">
+  <a class="logo" href="../index.html"><span class="emoji" aria-hidden="true">☕</span><span>온도 로스터스<small>ONDO ROASTERS</small></span></a>
+  <nav class="nav" aria-label="주요 메뉴">
+    <a href="../index.html">홈</a>
+    <a href="../blog/">블로그</a>
+    <a href="../shop/" class="is-current" aria-current="page">스토어</a>
+    <a href="../shop/support.html">고객센터</a>
+    <a href="../shop/track.html">배송 조회</a>
+  </nav>
+  <div class="nav-tools">
+    <button type="button" class="cart-btn" data-cart-open aria-label="장바구니 열기"><span class="t">장바구니</span> <b data-cart-count hidden>0</b></button>
+    <button type="button" class="menu-btn" aria-label="메뉴"><span></span><span></span><span></span></button>
+  </div>
+</div></header>
+<!-- HEADER:END -->
+<main class="done" id="done">
+  <div class="check">✓</div>
+  <p class="eyebrow">ORDER COMPLETE</p>
+  <h1>주문이 접수됐어요.<br>정성껏 준비하겠습니다.</h1>
+  <p style="color:var(--ink-2)">주문번호를 저장해 두세요. 배송 조회에서 상태를 확인할 수 있어요.</p>
+  <div class="order-box" id="box"></div>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <a class="btn" id="trackLink" href="track.html">배송 조회</a>
+    <a class="btn ghost" href="index.html">계속 쇼핑하기</a>
+  </div>
+  <p class="demo-note" style="margin-top:36px;text-align:left">실서비스라면 지금 이 순간 ① 결제사 웹훅이 주문을 '결제완료'로 바꾸고 ② 주문 시트에 한 줄이 추가되고 ③ 고객에게 알림톡이 나갑니다. 이 템플릿은 그 세 가지를 브라우저 안에서 흉내 냅니다 — <a href="../admin/" style="text-decoration:underline">관리자 페이지</a>에서 방금 주문을 확인해 보세요.</p>
+</main>
+<!-- FOOTER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<footer class="site-footer"><div class="wrap">
+  <div><div class="logo">☕ 온도 로스터스<small>ONDO ROASTERS</small></div><p style="margin-top:12px">오늘의 온도에 맞는 한 잔</p><p>hello@ondo.example · 010-0000-0000 · 평일 10:00–17:00</p><div class="sns"><a href="https://instagram.com/" target="_blank" rel="noopener">인스타그램</a></div></div>
+  <div><h4>SHOP</h4><a href="../shop/">전체 상품</a><a href="../shop/track.html">배송 조회</a><a href="../shop/support.html">고객센터 · FAQ</a></div>
+  <div><h4>STORY</h4><a href="../blog/">블로그</a><a href="../index.html#about">소개</a><a href="../index.html#contact">연락처</a><a href="../admin/" rel="nofollow">관리자</a></div>
+  <div class="copy"><span>© 2026 ONDO ROASTERS</span><span>결제·주문·재고는 브라우저 안에서만 동작하는 데모입니다</span></div>
+</div></footer>
+<script src="../shop/data.js"></script>
+<script src="../shop/shop.js"></script>
+<!-- FOOTER:END -->
+<script>
+(function(){
+  var no = new URLSearchParams(location.search).get('no'), o = no && SHOP.order(no);
+  if (!o) { document.getElementById('done').innerHTML = '<p>주문을 찾을 수 없어요.</p><a class="btn" href="index.html">상품 보러 가기</a>'; return; }
+  document.getElementById('trackLink').href = 'track.html?no=' + encodeURIComponent(o.no);
+  document.getElementById('box').innerHTML = '<dl><dt>주문번호</dt><dd style="font-size:18px;letter-spacing:.04em">'+o.no+'</dd><dt>주문 상품</dt><dd>'+o.items.map(function(i){return SHOP.esc(i.name)+(i.opt?' ('+SHOP.esc(i.opt)+')':'')+' × '+i.q;}).join('<br>')+'</dd><dt>결제 금액</dt><dd>'+SHOP.won(o.total)+' · '+SHOP.esc(o.customer.pay)+'</dd><dt>받는 분</dt><dd>'+SHOP.esc(o.customer.name)+' · '+SHOP.esc(o.customer.phone)+'</dd><dt>배송지</dt><dd>'+SHOP.esc(o.customer.addr)+'</dd>'+(o.customer.memo?'<dt>요청사항</dt><dd>'+SHOP.esc(o.customer.memo)+'</dd>':'')+'<dt>예정</dt><dd>상품 준비 후 영업일 2~3일 내 도착</dd></dl>';
+})();
+</script>
+</body>
+</html>

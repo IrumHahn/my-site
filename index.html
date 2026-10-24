@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko" data-root="shop/" data-site="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- data-tpl 속성과 HEADER/FOOTER, *:START/END 마커는 build.mjs 가 site.json 으로 채웁니다. 직접 고칠 땐 마커 바깥만 고치세요. -->
+<title data-tpl="{brand} | {tagline}">온도 로스터스 | 오늘의 온도에 맞는 한 잔</title>
+<meta name="description" data-tpl="{description}" content="주문 후 로스팅해 48시간 안에 보내는 작은 스페셜티 로스터리. 원두·드립백·정기배송을 판매하고, 블로그에 만드는 과정을 기록합니다.">
+<link rel="canonical" data-tpl="{base}" href="https://my-site.pages.dev/">
+<meta property="og:title" data-tpl="{brand} — {tagline}" content="온도 로스터스 — 오늘의 온도에 맞는 한 잔">
+<meta property="og:description" data-tpl="{description}" content="주문 후 로스팅해 48시간 안에 보내는 작은 스페셜티 로스터리. 원두·드립백·정기배송을 판매하고, 블로그에 만드는 과정을 기록합니다.">
+<meta property="og:image" data-tpl="{og}" content="https://my-site.pages.dev/assets/img/og.svg">
+<meta property="og:url" data-tpl="{base}" content="https://my-site.pages.dev/">
+<meta property="og:type" content="website">
+<link rel="alternate" type="application/rss+xml" title="블로그 RSS" href="blog/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="assets/theme.css">
+<link rel="stylesheet" href="assets/site.css">
+<!-- JSONLD:START -->
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://my-site.pages.dev/#org","name":"온도 로스터스","alternateName":"ONDO ROASTERS","url":"https://my-site.pages.dev/","email":"hello@ondo.example","telephone":"010-0000-0000","description":"주문 후 로스팅해 48시간 안에 보내는 작은 스페셜티 로스터리. 원두·드립백·정기배송을 판매하고, 블로그에 만드는 과정을 기록합니다.","sameAs":["https://instagram.com/"]},{"@type":"WebSite","@id":"https://my-site.pages.dev/#site","url":"https://my-site.pages.dev/","name":"온도 로스터스","inLanguage":"ko-KR","publisher":{"@id":"https://my-site.pages.dev/#org"}},{"@type":"OnlineStore","name":"온도 로스터스","url":"https://my-site.pages.dev/shop/","currenciesAccepted":"KRW","paymentAccepted":"카드, 계좌이체, 간편결제"}]}</script>
+<!-- JSONLD:END -->
+</head>
+<body>
+<!-- HEADER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<header class="site-header"><div class="wrap">
+  <a class="logo" href="index.html"><span class="emoji" aria-hidden="true">☕</span><span>온도 로스터스<small>ONDO ROASTERS</small></span></a>
+  <nav class="nav" aria-label="주요 메뉴">
+    <a href="index.html" class="is-current" aria-current="page">홈</a>
+    <a href="blog/">블로그</a>
+    <a href="shop/">스토어</a>
+    <a href="shop/support.html">고객센터</a>
+    <a href="shop/track.html">배송 조회</a>
+  </nav>
+  <div class="nav-tools">
+    <button type="button" class="cart-btn" data-cart-open aria-label="장바구니 열기"><span class="t">장바구니</span> <b data-cart-count hidden>0</b></button>
+    <button type="button" class="menu-btn" aria-label="메뉴"><span></span><span></span><span></span></button>
+  </div>
+</div></header>
+<!-- HEADER:END -->
+
+<main>
+  <!-- 히어로: site.json 의 brand/tagline/description -->
+  <section class="hero" id="home">
+    <div class="wrap">
+<!-- HERO:START -->
+<div class="emoji-big" aria-hidden="true">☕</div>
+<p class="kicker">ONDO ROASTERS</p>
+<h1>오늘의 온도에 맞는 한 잔</h1>
+<p>주문 후 로스팅해 48시간 안에 보내는 작은 스페셜티 로스터리. 원두·드립백·정기배송을 판매하고, 블로그에 만드는 과정을 기록합니다.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="shop/">상품 보러 가기</a><a class="btn ghost" href="blog/">블로그 읽기</a></div>
+<!-- HERO:END -->
+    </div>
+  </section>
+
+  <!-- 최신 글 3 (blog/posts.json → build.mjs 가 HTML 에 직접 구움) -->
+  <section class="section wrap" id="latest">
+    <div class="reveal">
+      <p class="eyebrow">BLOG</p>
+      <h2 class="section-title">최근 이야기</h2>
+    </div>
+    <div class="post-grid" style="margin-top:32px">
+<!-- POSTS:START -->
+<a class="post-card reveal" href="blog/how-to-store-beans.html" data-post-card="how-to-store-beans">
+  <time datetime="2026-08-28">2026. 8. 28.</time>
+  <h3>원두는 냉장고에 넣으면 안 되나요?</h3>
+  <p>보관의 세 가지 원칙과 로스팅 후 3~4주 안에 마셔야 하는 이유.</p>
+  <div class="tags"><span class="tag">가이드</span><span class="tag">보관</span></div>
+</a>
+<a class="post-card reveal" href="blog/first-story.html" data-post-card="first-story">
+  <time datetime="2026-08-20">2026. 8. 20.</time>
+  <h3>우리가 이 브랜드를 시작한 이유</h3>
+  <p>작은 불편에서 시작된 고민이 어떻게 하나의 브랜드가 되었는지, 그 첫 마음을 기록합니다.</p>
+  <div class="tags"><span class="tag">브랜드</span><span class="tag">시작</span></div>
+</a>
+<a class="post-card reveal" href="blog/behind-package.html" data-post-card="behind-package">
+  <time datetime="2026-08-14">2026. 8. 14.</time>
+  <h3>패키지 하나를 바꾸는 데 석 달이 걸린 이야기</h3>
+  <p>고객의 한 줄 후기에서 시작된 패키지 개선 프로젝트. 사소해 보이는 디테일에 오래 머문 이유를 적었습니다.</p>
+  <div class="tags"><span class="tag">비하인드</span><span class="tag">제품</span></div>
+</a>
+<!-- POSTS:END -->
+    </div>
+    <p style="margin-top:28px"><a class="btn ghost" href="blog/">블로그 더 보기 →</a></p>
+  </section>
+
+  <!-- 대표 상품 3 (shop/products.json 의 featured:true → build.mjs 가 HTML 에 직접 구움) -->
+  <section class="section" style="background:var(--paper-2)" id="featured">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">FEATURED</p>
+        <h2 class="section-title">대표 상품</h2>
+      </div>
+      <div class="grid" style="margin-top:36px">
+<!-- FEATURED:START -->
+<article class="card reveal" data-cat="blend" data-product-card="dawn-blend">
+  <span class="badge">BEST</span>
+  <a class="card-media" href="shop/products/dawn-blend.html"><img src="assets/img/p-dawn.svg" alt="새벽 블렌드" loading="lazy" width="800" height="1000"></a>
+  <div class="card-body">
+    <span class="card-cat">블렌드</span>
+    <h3><a href="shop/products/dawn-blend.html">새벽 블렌드</a></h3>
+    <p class="card-sub">DAWN BLEND · 다크 초콜릿 · 헤이즐넛</p>
+    <div class="card-notes"><span>다크 초콜릿</span><span>헤이즐넛</span><span>흑설탕</span></div>
+    <div class="card-foot"><span class="price">16,000원</span><span class="stock-note" data-stock-for="dawn-blend"></span></div>
+    <a class="btn sm ghost block" href="shop/products/dawn-blend.html" style="margin-top:12px">옵션 고르기</a>
+  </div>
+</article>
+<article class="card reveal" data-cat="blend" data-product-card="noon-blend">
+  
+  <a class="card-media" href="shop/products/noon-blend.html"><img src="assets/img/p-noon.svg" alt="정오 블렌드" loading="lazy" width="800" height="1000"></a>
+  <div class="card-body">
+    <span class="card-cat">블렌드</span>
+    <h3><a href="shop/products/noon-blend.html">정오 블렌드</a></h3>
+    <p class="card-sub">NOON BLEND · 오렌지 · 카라멜</p>
+    <div class="card-notes"><span>오렌지</span><span>카라멜</span><span>밀크 초콜릿</span></div>
+    <div class="card-foot"><span class="price">16,000원</span><span class="stock-note" data-stock-for="noon-blend"></span></div>
+    <a class="btn sm ghost block" href="shop/products/noon-blend.html" style="margin-top:12px">옵션 고르기</a>
+  </div>
+</article>
+<article class="card reveal" data-cat="single" data-product-card="ethiopia-yirgacheffe">
+  <span class="badge">NEW</span>
+  <a class="card-media" href="shop/products/ethiopia-yirgacheffe.html"><img src="assets/img/p-ethiopia.svg" alt="에티오피아 예가체프" loading="lazy" width="800" height="1000"></a>
+  <div class="card-body">
+    <span class="card-cat">싱글 오리진</span>
+    <h3><a href="shop/products/ethiopia-yirgacheffe.html">에티오피아 예가체프</a></h3>
+    <p class="card-sub">ETHIOPIA YIRGACHEFFE · 자스민 · 베르가못</p>
+    <div class="card-notes"><span>자스민</span><span>베르가못</span><span>복숭아</span></div>
+    <div class="card-foot"><span class="price">19,000원</span><span class="stock-note" data-stock-for="ethiopia-yirgacheffe"></span></div>
+    <a class="btn sm ghost block" href="shop/products/ethiopia-yirgacheffe.html" style="margin-top:12px">옵션 고르기</a>
+  </div>
+</article>
+<!-- FEATURED:END -->
+      </div>
+      <p style="margin-top:32px"><a class="btn ghost" href="shop/">전체 상품 보기 →</a></p>
+    </div>
+  </section>
+
+  <!-- 소개: site.json 의 about -->
+  <section class="section wrap" id="about">
+<!-- ABOUT:START -->
+<div class="reveal">
+  <p class="eyebrow">ABOUT</p>
+  <h2 class="section-title">커피는 로스팅한 날부터 시계가 돌아갑니다</h2>
+  <p>마트 원두는 이미 몇 달 된 것들입니다. 우리는 주문이 들어온 뒤에 볶습니다. 그래서 봉투를 열었을 때 나는 향이 다릅니다. 로스팅 날짜를 도장으로 찍는 이유는 숨길 게 없기 때문이에요.</p>
+</div>
+<div class="steps" style="margin-top:0">
+  <div class="reveal"><b>01</b><h3>주문 후 제작</h3><p>재고가 아니라 주문서를 보고 만듭니다.</p></div>
+  <div class="reveal"><b>02</b><h3>48시간 내 발송</h3><p>하루 숙성 후 질소 충전해 보냅니다.</p></div>
+  <div class="reveal"><b>03</b><h3>미개봉 7일 교환</h3><p>파손·오배송은 즉시 재발송합니다.</p></div>
+</div>
+<!-- ABOUT:END -->
+  </section>
+
+  <!-- FAQ 일부: shop/products.json 의 faq 앞 3개 -->
+  <section class="section wrap" style="padding-top:0">
+    <div class="reveal">
+      <p class="eyebrow">FAQ</p>
+      <h2 class="section-title">자주 묻는 질문</h2>
+    </div>
+    <div class="faq" style="margin-top:28px;max-width:820px">
+<!-- FAQ:START -->
+<details><summary>로스팅한 지 얼마나 된 원두가 오나요?</summary><p>원두는 주문이 들어온 뒤 로스팅해서 48시간 안에 발송합니다. 봉투 뒷면에 로스팅 날짜를 도장으로 찍어 드립니다. 드립백은 매주 월요일 로스팅해 수요일에 포장합니다.</p></details>
+<details><summary>분쇄해서 받을 수 있나요?</summary><p>네. 주문 시 옵션에서 핸드드립용·에스프레소용 중 고를 수 있습니다. 향을 오래 즐기려면 홀빈을 추천하고, 그라인더가 없다면 핸드드립용을 고르세요.</p></details>
+<details><summary>배송은 얼마나 걸리나요?</summary><p>로스팅 후 발송하기 때문에 주문일 기준 2~3일(영업일)이 걸립니다. 3만원 이상 주문은 배송비가 무료이고, 그 미만은 3,000원입니다. 정기배송은 항상 무료입니다.</p></details>
+<!-- FAQ:END -->
+    </div>
+    <p style="margin-top:20px"><a class="text-link" href="shop/support.html">전체 FAQ · 1:1 문의 →</a></p>
+  </section>
+
+  <!-- 연락: site.json 의 contact / sns -->
+  <section class="section band" id="contact">
+    <div class="wrap">
+      <p class="eyebrow">CONTACT</p>
+      <h2 class="section-title">연락처</h2>
+<!-- CONTACT:START -->
+<div class="contact-grid">
+  <div><b>EMAIL</b><a href="mailto:hello@ondo.example">hello@ondo.example</a></div>
+  <div><b>PHONE</b><a href="tel:010-0000-0000">010-0000-0000</a><br><span style="color:var(--ink-2);font-size:13px">평일 10:00–17:00</span></div>
+  <div><b>ADDRESS</b>서울시 서초구 서초중앙로22길 42</div>
+</div>
+<div class="sns"><a href="https://instagram.com/" target="_blank" rel="noopener">인스타그램</a></div>
+<!-- CONTACT:END -->
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<footer class="site-footer"><div class="wrap">
+  <div><div class="logo">☕ 온도 로스터스<small>ONDO ROASTERS</small></div><p style="margin-top:12px">오늘의 온도에 맞는 한 잔</p><p>hello@ondo.example · 010-0000-0000 · 평일 10:00–17:00</p><div class="sns"><a href="https://instagram.com/" target="_blank" rel="noopener">인스타그램</a></div></div>
+  <div><h4>SHOP</h4><a href="shop/">전체 상품</a><a href="shop/track.html">배송 조회</a><a href="shop/support.html">고객센터 · FAQ</a></div>
+  <div><h4>STORY</h4><a href="blog/">블로그</a><a href="index.html#about">소개</a><a href="index.html#contact">연락처</a><a href="admin/" rel="nofollow">관리자</a></div>
+  <div class="copy"><span>© 2026 ONDO ROASTERS</span><span>결제·주문·재고는 브라우저 안에서만 동작하는 데모입니다</span></div>
+</div></footer>
+<script src="shop/data.js"></script>
+<script src="shop/shop.js"></script>
+<!-- FOOTER:END -->
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Cloudflare Pages 설정 (선택). 프로젝트 루트로 복사해서 쓰세요:  cp deploy/wrangler.toml ./wrangler.toml
+# 배포:  node build.mjs && wrangler pages deploy
+name = "my-site"
+pages_build_output_dir = "."
+compatibility_date = "2026-01-01"

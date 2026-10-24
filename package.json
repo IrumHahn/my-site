@@ -1,0 +1,15 @@
+{
+  "name": "my-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "블로그 + 쇼핑몰(모의 결제) 정적 사이트 템플릿 — 수강생 배포용. 런타임 npm 의존성 없음.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests/build.test.mjs",
+    "dev": "node build.mjs && npx -y serve . -l 3000",
+    "new:post": "node scripts/new-post.mjs",
+    "new:product": "node scripts/new-product.mjs"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,54 @@
+# 온도 로스터스 (ONDO ROASTERS)
+
+> 오늘의 온도에 맞는 한 잔. 주문 후 로스팅해 48시간 안에 보내는 작은 스페셜티 로스터리. 원두·드립백·정기배송을 판매하고, 블로그에 만드는 과정을 기록합니다.
+
+## 주요 페이지
+- [홈](https://my-site.pages.dev/): 브랜드 소개, 최신 글, 대표 상품
+- [블로그](https://my-site.pages.dev/blog/): 만드는 과정과 가이드 (RSS: https://my-site.pages.dev/blog/feed.xml)
+- [전체 상품](https://my-site.pages.dev/shop/): 가격과 재고
+- [고객센터](https://my-site.pages.dev/shop/support.html): FAQ, 1:1 문의
+- [배송 조회](https://my-site.pages.dev/shop/track.html): 주문번호로 배송 상태 확인
+
+## 상품 (2026-10-24 기준)
+- 새벽 블렌드 — 16,000원 · DAWN BLEND · 다크 초콜릿 · 헤이즐넛 · 판매 중 · https://my-site.pages.dev/shop/products/dawn-blend.html
+- 정오 블렌드 — 16,000원 · NOON BLEND · 오렌지 · 카라멜 · 판매 중 · https://my-site.pages.dev/shop/products/noon-blend.html
+- 에티오피아 예가체프 — 19,000원 · ETHIOPIA YIRGACHEFFE · 자스민 · 베르가못 · 판매 중 · https://my-site.pages.dev/shop/products/ethiopia-yirgacheffe.html
+- 콜롬비아 우일라 — 18,000원 · COLOMBIA HUILA · 카라멜 · 붉은 사과 · 판매 중 · https://my-site.pages.dev/shop/products/colombia-huila.html
+- 케냐 AA — 21,000원 · KENYA AA · 블랙커런트 · 자몽 · 품절 · https://my-site.pages.dev/shop/products/kenya-aa.html
+- 디카페인 콜롬비아 — 18,000원 · DECAF COLOMBIA · 밀크 초콜릿 · 건포도 · 판매 중 · https://my-site.pages.dev/shop/products/decaf-colombia.html
+- 드립백 7일 세트 — 14,000원 · DRIP BAG 7 DAYS · 12g × 7개 · 판매 중 · https://my-site.pages.dev/shop/products/dripbag-7.html
+- 드립백 선물세트 — 32,000원 · GIFT SET · 12g × 14개 · 네이비 박스 · 판매 중 · https://my-site.pages.dev/shop/products/dripbag-gift.html
+- 정기배송 · 2주마다 200g — 15,000원/회 · SUBSCRIPTION · 매 회차 다른 원두 · 판매 중 · https://my-site.pages.dev/shop/products/subscription.html
+
+## 블로그 글
+- [원두는 냉장고에 넣으면 안 되나요?](https://my-site.pages.dev/blog/how-to-store-beans.html) (2026-08-28) — 보관의 세 가지 원칙과 로스팅 후 3~4주 안에 마셔야 하는 이유.
+- [우리가 이 브랜드를 시작한 이유](https://my-site.pages.dev/blog/first-story.html) (2026-08-20) — 작은 불편에서 시작된 고민이 어떻게 하나의 브랜드가 되었는지, 그 첫 마음을 기록합니다.
+- [패키지 하나를 바꾸는 데 석 달이 걸린 이야기](https://my-site.pages.dev/blog/behind-package.html) (2026-08-14) — 고객의 한 줄 후기에서 시작된 패키지 개선 프로젝트. 사소해 보이는 디테일에 오래 머문 이유를 적었습니다.
+
+## 배송·정책
+- 30,000원 이상 무료배송 (미만 3,000원)
+- 미개봉 7일 이내 교환, 파손·오배송은 즉시 재발송
+
+## 자주 묻는 질문
+- Q. 로스팅한 지 얼마나 된 원두가 오나요?
+  A. 원두는 주문이 들어온 뒤 로스팅해서 48시간 안에 발송합니다. 봉투 뒷면에 로스팅 날짜를 도장으로 찍어 드립니다. 드립백은 매주 월요일 로스팅해 수요일에 포장합니다.
+- Q. 분쇄해서 받을 수 있나요?
+  A. 네. 주문 시 옵션에서 핸드드립용·에스프레소용 중 고를 수 있습니다. 향을 오래 즐기려면 홀빈을 추천하고, 그라인더가 없다면 핸드드립용을 고르세요.
+- Q. 배송은 얼마나 걸리나요?
+  A. 로스팅 후 발송하기 때문에 주문일 기준 2~3일(영업일)이 걸립니다. 3만원 이상 주문은 배송비가 무료이고, 그 미만은 3,000원입니다. 정기배송은 항상 무료입니다.
+- Q. 원두는 어떻게 보관하나요?
+  A. 봉투째 지퍼를 닫아 직사광선이 없는 서늘한 곳에 두세요. 냉장고는 습기 때문에 오히려 좋지 않습니다. 로스팅 후 3~4주 안에 드시는 것이 가장 맛있습니다.
+- Q. 교환·환불은 어떻게 하나요?
+  A. 식품 특성상 개봉한 원두는 환불이 어렵습니다. 미개봉 상태라면 수령 후 7일 이내에 고객센터로 문의해 주세요. 파손·오배송은 사진과 함께 알려 주시면 즉시 재발송합니다.
+- Q. 정기배송은 어떻게 해지하나요?
+  A. 고객센터 문의 또는 이메일로 '해지'라고 보내 주시면 다음 회차부터 중단됩니다. 위약금은 없습니다.
+- Q. 선물세트에 메시지를 넣을 수 있나요?
+  A. 네. 주문서의 요청사항에 메시지를 적어 주시면 손으로 카드에 옮겨 적어 동봉합니다.
+
+## 원본 데이터
+- [상품 데이터(JSON)](https://my-site.pages.dev/shop/products.json)
+- [블로그 데이터(JSON)](https://my-site.pages.dev/blog/posts.json)
+
+## 연락처
+- 이메일: hello@ondo.example
+- 전화: 010-0000-0000

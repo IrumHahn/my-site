@@ -1,0 +1,2 @@
+/* build.mjs 가 site.json 의 colors 에서 생성. 직접 고치지 말고 site.json 을 고친 뒤 node build.mjs */
+:root { --ink: #14213d; --amber: #c8892b; --paper: #f6f1e8; }

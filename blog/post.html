@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko" data-root="../shop/" data-site="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- kit/blog/post.html 이식 — posts.json 을 브라우저에서 읽어 그리는 예비 페이지 (post.html?slug=글슬러그).
+     평소에는 build.mjs 가 만든 정적 blog/<slug>.html 이 쓰이고, 이 페이지는 아직 빌드 전인 글을 미리 볼 때 씁니다. -->
+<title data-tpl="블로그 | {brand}">블로그 | 온도 로스터스</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:url" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/theme.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<!-- HEADER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<header class="site-header"><div class="wrap">
+  <a class="logo" href="../index.html"><span class="emoji" aria-hidden="true">☕</span><span>온도 로스터스<small>ONDO ROASTERS</small></span></a>
+  <nav class="nav" aria-label="주요 메뉴">
+    <a href="../index.html">홈</a>
+    <a href="../blog/" class="is-current" aria-current="page">블로그</a>
+    <a href="../shop/">스토어</a>
+    <a href="../shop/support.html">고객센터</a>
+    <a href="../shop/track.html">배송 조회</a>
+  </nav>
+  <div class="nav-tools">
+    <button type="button" class="cart-btn" data-cart-open aria-label="장바구니 열기"><span class="t">장바구니</span> <b data-cart-count hidden>0</b></button>
+    <button type="button" class="menu-btn" aria-label="메뉴"><span></span><span></span><span></span></button>
+  </div>
+</div></header>
+<!-- HEADER:END -->
+
+<main class="article">
+  <a class="back" href="index.html">&larr; 목록으로</a>
+  <div id="main"></div>
+</main>
+<script>
+(function(){
+  var main = document.getElementById('main');
+  function el(tag, cls, text){ var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function fmtDate(s){ var d = new Date(s + 'T00:00:00'); if (isNaN(d)) return s || ''; return d.getFullYear() + '. ' + (d.getMonth()+1) + '. ' + d.getDate() + '.'; }
+  function slugOf(p){ return p.slug || p.id; }
+  // 초경량 마크다운: 빈 줄=문단, "## "=소제목, "- "=리스트, "![alt](src)"=이미지. 전부 textContent (XSS-safe).
+  function renderBody(src){
+    var box = el('div','body');
+    String(src || '').replace(/\r\n/g,'\n').split(/\n\s*\n/).forEach(function(block){
+      block = block.trim(); if (!block) return;
+      var lines = block.split('\n'), m;
+      if (lines.every(function(l){ return /^- /.test(l.trim()); })){ var ul = el('ul'); lines.forEach(function(l){ ul.appendChild(el('li', null, l.trim().slice(2))); }); box.appendChild(ul); }
+      else if (/^## /.test(block)) box.appendChild(el('h2', null, block.slice(3).trim()));
+      else if ((m = block.match(/^!\[([^\]]*)\]\(([^)]+)\)$/))) { var img = el('img'); img.src = m[2]; img.alt = m[1]; img.loading = 'lazy'; box.appendChild(img); }
+      else box.appendChild(el('p', null, block));
+    });
+    return box;
+  }
+  function notFound(){
+    var d = el('div','notfound');
+    d.appendChild(el('h1', null, '글을 찾을 수 없습니다'));
+    d.appendChild(el('p', null, '주소가 잘못되었거나 삭제된 글일 수 있어요.'));
+    var a = el('a', 'text-link', '글 목록으로 돌아가기'); a.href = 'index.html'; d.appendChild(a);
+    main.appendChild(d);
+  }
+  function setAttr(sel, attr, val){ var n = document.querySelector(sel); if (n) n.setAttribute(attr, val); }
+  function addLd(obj){ var ld = document.createElement('script'); ld.type = 'application/ld+json'; ld.textContent = JSON.stringify(obj); document.head.appendChild(ld); }
+  function setMeta(post){
+    var title = String(post.title || '블로그'), desc = String(post.description || post.summary || '').slice(0, 160);
+    var url = location.origin + location.pathname.replace(/post\.html$/, '') + slugOf(post) + '.html';
+    var author = String(post.author || '').trim();
+    document.title = title + ' | ' + (document.title.split('|').pop() || '').trim();
+    setAttr('meta[name="description"]', 'content', desc); setAttr('meta[name="author"]', 'content', author);
+    setAttr('link[rel="canonical"]', 'href', url);
+    setAttr('meta[property="og:title"]', 'content', title); setAttr('meta[property="og:description"]', 'content', desc); setAttr('meta[property="og:url"]', 'content', url);
+    var article = { '@context': 'https://schema.org', '@type': 'BlogPosting', headline: title, description: desc, datePublished: String(post.date || ''), dateModified: String(post.updated || post.date || ''), mainEntityOfPage: url, keywords: Array.isArray(post.tags) ? post.tags.map(String).join(', ') : '' };
+    if (author) article.author = { '@type': 'Person', name: author };
+    addLd(article);
+    var faq = Array.isArray(post.faq) ? post.faq.filter(function(f){ return f && f.q && f.a; }) : [];
+    if (faq.length) addLd({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(function(f){ return { '@type': 'Question', name: String(f.q), acceptedAnswer: { '@type': 'Answer', text: String(f.a) } }; }) });
+    addLd({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '블로그', item: location.origin + location.pathname.replace(/post\.html$/, '') },
+      { '@type': 'ListItem', position: 2, name: title, item: url } ] });
+  }
+  function renderFaq(faq){ var sec = el('section','faq'); sec.appendChild(el('h2', null, '자주 묻는 질문')); faq.forEach(function(f){ var d = el('details'); d.appendChild(el('summary', null, String(f.q))); d.appendChild(el('p', null, String(f.a))); sec.appendChild(d); }); return sec; }
+  function renderSources(sources){
+    var sec = el('section','sources'); sec.appendChild(el('h2', null, '참고·출처')); var ol = el('ol');
+    sources.forEach(function(s){ var li = el('li'); if (s && s.url){ var a = el('a', null, String(s.title || s.url)); a.href = String(s.url); a.rel = 'noopener'; a.target = '_blank'; li.appendChild(a); } else li.textContent = String(s && s.title || s || ''); ol.appendChild(li); });
+    sec.appendChild(ol); return sec;
+  }
+  function render(posts){
+    var qs = new URLSearchParams(location.search), id = qs.get('slug') || qs.get('id');
+    posts = (Array.isArray(posts) ? posts : []).slice().sort(function(a,b){ return String(b.date||'').localeCompare(String(a.date||'')); });
+    var idx = -1; posts.forEach(function(p,i){ if (slugOf(p) === id || String(p.id) === id) idx = i; });
+    if (idx < 0){ notFound(); return; }
+    var post = posts[idx]; setMeta(post);
+    var art = el('article'), head = el('header','post-head');
+    var t = el('time', null, fmtDate(post.date)); t.setAttribute('datetime', String(post.date||'')); head.appendChild(t);
+    head.appendChild(el('h1', null, String(post.title || '(제목 없음)')));
+    if (post.author || (post.updated && post.updated !== post.date)){ var meta = el('div','meta'); if (post.author) meta.appendChild(el('span', null, String(post.author))); if (post.updated && post.updated !== post.date) meta.appendChild(el('span', null, '수정 ' + fmtDate(post.updated))); head.appendChild(meta); }
+    if (Array.isArray(post.tags) && post.tags.length){ var tags = el('div','tags'); post.tags.forEach(function(tg){ tags.appendChild(el('span','tag', String(tg))); }); head.appendChild(tags); }
+    art.appendChild(head); art.appendChild(el('hr','rule')); art.appendChild(renderBody(post.body));
+    var faq = Array.isArray(post.faq) ? post.faq.filter(function(f){ return f && f.q && f.a; }) : [];
+    if (faq.length) art.appendChild(renderFaq(faq));
+    if (Array.isArray(post.sources) && post.sources.length) art.appendChild(renderSources(post.sources));
+    var prev = posts[idx+1], next = posts[idx-1];
+    if (prev || next){
+      var nav = el('nav','pn');
+      function cell(p, cls, label){ if (!p){ nav.appendChild(el('span')); return; } var a = el('a', cls); a.href = 'post.html?slug=' + encodeURIComponent(slugOf(p)); a.appendChild(el('div','dir', label)); a.appendChild(el('div','pn-title', String(p.title || ''))); nav.appendChild(a); }
+      cell(prev, 'prev', '이전 글'); cell(next, 'next', '다음 글'); art.appendChild(nav);
+    }
+    main.appendChild(art);
+  }
+  fetch('posts.json', {cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(render).catch(function(){ notFound(); });
+})();
+</script>
+
+<!-- FOOTER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<footer class="site-footer"><div class="wrap">
+  <div><div class="logo">☕ 온도 로스터스<small>ONDO ROASTERS</small></div><p style="margin-top:12px">오늘의 온도에 맞는 한 잔</p><p>hello@ondo.example · 010-0000-0000 · 평일 10:00–17:00</p><div class="sns"><a href="https://instagram.com/" target="_blank" rel="noopener">인스타그램</a></div></div>
+  <div><h4>SHOP</h4><a href="../shop/">전체 상품</a><a href="../shop/track.html">배송 조회</a><a href="../shop/support.html">고객센터 · FAQ</a></div>
+  <div><h4>STORY</h4><a href="../blog/">블로그</a><a href="../index.html#about">소개</a><a href="../index.html#contact">연락처</a><a href="../admin/" rel="nofollow">관리자</a></div>
+  <div class="copy"><span>© 2026 ONDO ROASTERS</span><span>결제·주문·재고는 브라우저 안에서만 동작하는 데모입니다</span></div>
+</div></footer>
+<script src="../shop/data.js"></script>
+<script src="../shop/shop.js"></script>
+<!-- FOOTER:END -->
+</body>
+</html>

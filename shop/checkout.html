@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko" data-root="../shop/" data-site="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- sample-roastery/checkout.html 이식. 주문서 + 모의 결제창. 실결제 없음. -->
+<title data-tpl="주문서 | {brand}">주문서 | 온도 로스터스</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/theme.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<!-- HEADER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<header class="site-header"><div class="wrap">
+  <a class="logo" href="../index.html"><span class="emoji" aria-hidden="true">☕</span><span>온도 로스터스<small>ONDO ROASTERS</small></span></a>
+  <nav class="nav" aria-label="주요 메뉴">
+    <a href="../index.html">홈</a>
+    <a href="../blog/">블로그</a>
+    <a href="../shop/" class="is-current" aria-current="page">스토어</a>
+    <a href="../shop/support.html">고객센터</a>
+    <a href="../shop/track.html">배송 조회</a>
+  </nav>
+  <div class="nav-tools">
+    <button type="button" class="cart-btn" data-cart-open aria-label="장바구니 열기"><span class="t">장바구니</span> <b data-cart-count hidden>0</b></button>
+    <button type="button" class="menu-btn" aria-label="메뉴"><span></span><span></span><span></span></button>
+  </div>
+</div></header>
+<!-- HEADER:END -->
+
+<main class="wrap" style="padding-bottom:80px">
+  <p class="eyebrow" style="margin-top:40px">CHECKOUT</p>
+  <h1 class="section-title">주문서</h1>
+
+  <form class="checkout" id="form" novalidate>
+    <div>
+      <section class="panel">
+        <h2>주문하시는 분</h2>
+        <div class="field-row">
+          <div class="field"><label for="name">이름</label><input id="name" name="name" required autocomplete="name" placeholder="홍길동"></div>
+          <div class="field"><label for="phone">휴대폰</label><input id="phone" name="phone" required autocomplete="tel" inputmode="tel" placeholder="010-0000-0000"></div>
+        </div>
+        <div class="field"><label for="email">이메일 (주문 확인 메일)</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+      </section>
+
+      <section class="panel">
+        <h2>배송지</h2>
+        <div class="field-row">
+          <div class="field"><label for="zip">우편번호</label><input id="zip" name="zip" inputmode="numeric" placeholder="06000"></div>
+          <div class="field" style="align-self:end"><button type="button" class="btn sm ghost block" onclick="SHOP.toast('데모에서는 주소를 직접 입력해 주세요')">우편번호 찾기</button></div>
+        </div>
+        <div class="field"><label for="addr1">주소</label><input id="addr1" name="addr1" required placeholder="서울시 ○○구 ○○로 00"></div>
+        <div class="field"><label for="addr2">상세 주소</label><input id="addr2" name="addr2" placeholder="동·호수"></div>
+        <div class="field"><label for="memo">배송 요청사항</label><textarea id="memo" name="memo" placeholder="예: 문 앞에 두세요"></textarea></div>
+      </section>
+
+      <section class="panel">
+        <h2>결제 수단</h2>
+        <div class="pay-methods">
+          <label><input type="radio" name="pay" value="card" checked><span>신용·체크카드</span></label>
+          <label><input type="radio" name="pay" value="transfer"><span>계좌이체</span></label>
+          <label><input type="radio" name="pay" value="easy"><span>간편결제</span></label>
+        </div>
+        <p class="demo-note" style="margin-top:14px">이 템플릿의 결제창은 <b>모의 결제</b>입니다. 카드번호는 아무 숫자나 넣어도 되고, 실제로 돈이 나가지 않습니다. 실서비스에서는 이 자리에 토스페이먼츠·포트원 같은 결제 위젯이 들어갑니다.</p>
+      </section>
+    </div>
+
+    <aside class="summary-sticky">
+      <section class="panel">
+        <h2>주문 내역</h2>
+        <div id="lines"></div>
+        <div style="margin-top:14px">
+          <div class="sum-row"><span>상품 합계</span><span id="sub">0원</span></div>
+          <div class="sum-row"><span>배송비</span><span id="ship">0원</span></div>
+          <div class="sum-row total"><span>결제 금액</span><span id="total">0원</span></div>
+        </div>
+        <label style="display:flex;gap:8px;font-size:13px;margin:8px 0 14px;align-items:flex-start"><input type="checkbox" id="agree" required style="margin-top:3px"> 주문 내용을 확인했고 결제에 동의합니다.</label>
+        <button type="submit" class="btn amber block" id="payBtn">결제하기</button>
+      </section>
+    </aside>
+  </form>
+</main>
+
+<!-- 모의 결제창 -->
+<div class="paywin-scrim" id="paywin" role="dialog" aria-modal="true" aria-label="결제">
+  <div class="paywin">
+    <div class="paywin-head"><span id="pwBrand">모의 결제</span><span id="pwMethod">카드</span></div>
+    <div class="paywin-body" id="pwBody">
+      <div style="font-size:12px;color:#666">결제 금액</div>
+      <div class="amt" id="pwAmt">0원</div>
+      <div id="pwCard">
+        <input placeholder="카드 번호 (아무 숫자나)" inputmode="numeric" id="pwNum" maxlength="19">
+        <div class="row"><input placeholder="MM/YY" id="pwExp" maxlength="5"><input placeholder="CVC" id="pwCvc" maxlength="3"></div>
+      </div>
+      <div id="pwProgress" class="paywin-progress" hidden><div class="spinner"></div><div>승인 요청 중…</div></div>
+    </div>
+    <div class="paywin-foot" id="pwFoot">
+      <button type="button" class="btn amber block" id="pwOk">결제 승인</button>
+      <button type="button" class="btn ghost block" id="pwCancel">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<footer class="site-footer"><div class="wrap">
+  <div><div class="logo">☕ 온도 로스터스<small>ONDO ROASTERS</small></div><p style="margin-top:12px">오늘의 온도에 맞는 한 잔</p><p>hello@ondo.example · 010-0000-0000 · 평일 10:00–17:00</p><div class="sns"><a href="https://instagram.com/" target="_blank" rel="noopener">인스타그램</a></div></div>
+  <div><h4>SHOP</h4><a href="../shop/">전체 상품</a><a href="../shop/track.html">배송 조회</a><a href="../shop/support.html">고객센터 · FAQ</a></div>
+  <div><h4>STORY</h4><a href="../blog/">블로그</a><a href="../index.html#about">소개</a><a href="../index.html#contact">연락처</a><a href="../admin/" rel="nofollow">관리자</a></div>
+  <div class="copy"><span>© 2026 ONDO ROASTERS</span><span>결제·주문·재고는 브라우저 안에서만 동작하는 데모입니다</span></div>
+</div></footer>
+<script src="../shop/data.js"></script>
+<script src="../shop/shop.js"></script>
+<!-- FOOTER:END -->
+<script>
+(function(){
+  var cart = SHOP.cart();
+  document.getElementById('pwBrand').textContent = SHOP.data().brand.name + ' PAY · 모의 결제';
+  if (!cart.length) { document.getElementById('form').innerHTML = '<div class="panel" style="grid-column:1/-1;text-align:center;padding:60px"><p>장바구니가 비어 있어요.</p><a class="btn" href="index.html">상품 보러 가기</a></div>'; return; }
+  function paint(){
+    var t = SHOP.totals();
+    document.getElementById('lines').innerHTML = SHOP.cart().map(function(l){ var p = SHOP.product(l.id); return '<div class="summary-line"><span>'+SHOP.esc(p.name)+' × '+l.q+'<small>'+SHOP.esc(SHOP.optText(l))+'</small></span><b>'+SHOP.won(SHOP.lineUnit(l)*l.q)+'</b></div>'; }).join('');
+    document.getElementById('sub').textContent = SHOP.won(t.sub);
+    document.getElementById('ship').textContent = t.ship ? SHOP.won(t.ship) : '무료';
+    document.getElementById('total').textContent = SHOP.won(t.total);
+    document.getElementById('pwAmt').textContent = SHOP.won(t.total);
+  }
+  paint();
+  var form = document.getElementById('form'), pw = document.getElementById('paywin');
+  var METHOD = { card: '카드', transfer: '계좌이체', easy: '간편결제' };
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var req = ['name','phone','addr1']; for (var i=0;i<req.length;i++){ var el=document.getElementById(req[i]); if(!el.value.trim()){ el.focus(); SHOP.toast('필수 항목을 채워 주세요'); return; } }
+    if (!document.getElementById('agree').checked) { SHOP.toast('결제 동의에 체크해 주세요'); return; }
+    var m = form.pay.value; document.getElementById('pwMethod').textContent = METHOD[m]; document.getElementById('pwCard').hidden = m !== 'card';
+    pw.classList.add('show');
+  });
+  document.getElementById('pwCancel').addEventListener('click', function(){ pw.classList.remove('show'); });
+  document.getElementById('pwOk').addEventListener('click', function(){
+    document.getElementById('pwCard').hidden = true; document.getElementById('pwProgress').hidden = false; document.getElementById('pwFoot').hidden = true;
+    setTimeout(function(){
+      var f = form;
+      var o = SHOP.placeOrder({ name: f.name.value.trim(), phone: f.phone.value.trim(), email: f.email.value.trim(), zip: f.zip.value.trim(), addr: (f.addr1.value + ' ' + f.addr2.value).trim(), memo: f.memo.value.trim(), pay: METHOD[f.pay.value] });
+      location.href = 'order-complete.html?no=' + encodeURIComponent(o.no);
+    }, 1400);
+  });
+})();
+</script>
+</body>
+</html>

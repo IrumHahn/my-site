@@ -1,0 +1,21 @@
+{
+  "brand": "온도 로스터스",
+  "en": "ONDO ROASTERS",
+  "tagline": "오늘의 온도에 맞는 한 잔",
+  "description": "주문 후 로스팅해 48시간 안에 보내는 작은 스페셜티 로스터리. 원두·드립백·정기배송을 판매하고, 블로그에 만드는 과정을 기록합니다.",
+  "logoEmoji": "☕",
+  "colors": { "primary": "#14213d", "accent": "#c8892b", "background": "#f6f1e8" },
+  "contact": { "email": "hello@ondo.example", "phone": "010-0000-0000", "hours": "평일 10:00–17:00", "address": "서울시 서초구 서초중앙로22길 42" },
+  "sns": { "instagram": "https://instagram.com/", "youtube": "", "naverBlog": "", "kakao": "" },
+  "baseUrl": "https://my-site.pages.dev/",
+  "about": {
+    "title": "커피는 로스팅한 날부터 시계가 돌아갑니다",
+    "body": "마트 원두는 이미 몇 달 된 것들입니다. 우리는 주문이 들어온 뒤에 볶습니다. 그래서 봉투를 열었을 때 나는 향이 다릅니다. 로스팅 날짜를 도장으로 찍는 이유는 숨길 게 없기 때문이에요.",
+    "points": [
+      { "title": "주문 후 제작", "desc": "재고가 아니라 주문서를 보고 만듭니다." },
+      { "title": "48시간 내 발송", "desc": "하루 숙성 후 질소 충전해 보냅니다." },
+      { "title": "미개봉 7일 교환", "desc": "파손·오배송은 즉시 재발송합니다." }
+    ]
+  },
+  "shop": { "freeShipping": 30000, "shippingFee": 3000, "orderPrefix": "OD", "currencyNote": "3만원 이상 무료배송" }
+}

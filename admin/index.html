@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ko" data-root="../shop/" data-site="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 관리자 = kit/blog/admin.html (글 관리, GitHub 토큰 모드) + sample-roastery/admin/index.html (상품·재고·주문·문의) 를 탭으로 합친 것.
+     글·상품 수정은 기본적으로 "이 브라우저 + JSON 내려받기" 모드로 동작하고, GitHub 토큰을 넣으면 저장소의 JSON 을 직접 커밋합니다(선택). -->
+<title data-tpl="관리자 | {brand}">관리자 | 온도 로스터스</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/theme.css">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  body { background: #eef0f4; }
+  .adm { max-width: 1240px; margin: 0 auto; padding: 24px var(--pad) 80px; }
+  .adm-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .adm-top h1 { font-family: var(--sans); font-size: 20px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+  .tabs button { height: 40px; padding: 0 18px; border: 1px solid #d5d9e2; background: #fff; border-radius: 8px; font-weight: 700; font-size: 14px; }
+  .tabs button.is-active { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .tabs button b { margin-left: 6px; padding: 1px 7px; border-radius: 100px; background: var(--amber); color: #fff; font-size: 11px; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+  .kpi { background: #fff; border: 1px solid #e3e6ec; border-radius: 10px; padding: 16px 18px; }
+  .kpi small { display: block; font-size: 12px; color: var(--ink-2); font-weight: 600; }
+  .kpi strong { font-size: 24px; }
+  .kpi.warn strong { color: var(--red); }
+  .box { background: #fff; border: 1px solid #e3e6ec; border-radius: 10px; padding: 18px; margin-bottom: 16px; overflow-x: auto; }
+  .box h2 { font-family: var(--sans); font-size: 16px; margin: 0 0 6px; }
+  .box p.lead { margin: 0 0 10px; font-size: 13px; color: var(--ink-2); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 720px; }
+  th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #edf0f4; vertical-align: middle; }
+  th { font-size: 12px; color: var(--ink-2); font-weight: 700; }
+  td input, td select { height: 34px; padding: 0 8px; border: 1px solid #d5d9e2; border-radius: 6px; font: inherit; width: 100%; }
+  td input[type=number] { width: 80px; }
+  .thumb { width: 44px; height: 55px; object-fit: cover; border-radius: 4px; }
+  .pill { display: inline-block; padding: 3px 9px; border-radius: 100px; font-size: 11.5px; font-weight: 700; background: #eef0f4; }
+  .pill.paid { background: #fff1d6; color: var(--amber-2); } .pill.preparing { background: #e6ecff; color: #2d4bb5; } .pill.shipped { background: #e3f4ea; color: var(--green); } .pill.delivered { background: #e9e9e9; } .pill.cancelled { background: #fde3e3; color: var(--red); }
+  .pill.out { background: #fde3e3; color: var(--red); } .pill.low { background: #fff1d6; color: var(--amber-2); } .pill.ok { background: #e3f4ea; color: var(--green); }
+  .btn.xs { height: 32px; padding: 0 12px; font-size: 12px; }
+  .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ai-box { background: #f7f4ff; border: 1px dashed #b9a7f0; border-radius: 8px; padding: 12px 14px; font-size: 13px; margin-top: 10px; white-space: pre-wrap; }
+  .ai-label { font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #6b4fd8; margin-bottom: 4px; }
+  textarea.ans { width: 100%; min-height: 70px; padding: 10px; border: 1px solid #d5d9e2; border-radius: 6px; font: inherit; }
+  .tab-panel[hidden] { display: none; }
+  .form label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 6px; }
+  .form label small { font-weight: 400; color: var(--ink-2); }
+  .form input[type=text], .form input[type=password], .form input[type=date], .form input[type=number], .form textarea, .form select { width: 100%; border: 1px solid #d5d9e2; border-radius: 8px; padding: 10px 12px; font-size: 14.5px; font: inherit; background: #fff; }
+  .form textarea { min-height: 220px; resize: vertical; line-height: 1.7; }
+  .form textarea.short { min-height: 70px; }
+  .status { margin: 14px 0 0; padding: 11px 14px; border-radius: 8px; font-size: 13.5px; display: none; white-space: pre-line; }
+  .status.show { display: block; }
+  .status.info { background: #eef3fd; color: #1d3f8f; border: 1px solid #ccdaf6; }
+  .status.ok { background: #e9f6ee; color: #1e7e46; border: 1px solid #c4e5d1; }
+  .status.err { background: #fdeeec; color: #c0392b; border: 1px solid #f2cdc7; }
+  .help { background: #f5f6f8; border: 1px solid #e2e5ea; border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: var(--ink-2); margin-top: 8px; line-height: 1.8; }
+  .help code, ol.guide code { background: #fff; border: 1px solid #e2e5ea; border-radius: 4px; padding: 0 5px; font-size: 12px; }
+  ol.guide { margin: 0 0 12px 20px; font-size: 13.5px; } ol.guide li { margin-bottom: 6px; }
+  .warn { background: #fdf3e7; border: 1px solid #f0d9b8; color: #7a5215; border-radius: 8px; padding: 12px 14px; font-size: 13px; margin: 10px 0; }
+  .mode { font-size: 12.5px; color: var(--ink-2); background: #fff; border: 1px solid #e2e5ea; border-radius: 999px; padding: 4px 12px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 720px) { .kpis, .two { grid-template-columns: 1fr 1fr; } .two { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="adm">
+  <div class="adm-top">
+    <div><h1 id="admTitle">관리자</h1><p style="margin:2px 0 0;font-size:13px;color:var(--ink-2)">글 · 상품 · 재고 · 주문 · 문의 — 주문/재고/문의는 이 브라우저(localStorage) 안에서만 동작하는 데모 <span class="mode" id="modeChip">로컬 모드</span></p></div>
+    <div class="row-actions"><a class="btn xs ghost" href="../index.html" target="_blank">사이트 열기 ↗</a><button class="btn xs ghost" id="seed">샘플 주문 5건 넣기</button><button class="btn xs ghost" id="reset">데모 초기화</button></div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="tabs" id="tabs">
+    <button data-tab="posts" class="is-active">글 관리 <b id="nPosts">0</b></button>
+    <button data-tab="products">상품 · 재고 <b id="nLow">0</b></button>
+    <button data-tab="orders">주문 · 배송 <b id="nOrders">0</b></button>
+    <button data-tab="inq">문의 <b id="nInq">0</b></button>
+    <button data-tab="ops">운영 브리핑</button>
+    <button data-tab="github">GitHub 연결 (선택)</button>
+  </div>
+
+  <!-- ===== 글 관리 (kit/blog/admin.html 이식) ===== -->
+  <section class="tab-panel" data-panel="posts">
+    <div class="box" id="postListBox">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <p class="lead" style="margin:0">로컬 모드: 수정한 뒤 <b>posts.json 내려받기</b> → 받은 파일을 <code>blog/posts.json</code> 에 덮어쓰고 <code>node build.mjs</code> → 커밋·배포. GitHub 모드에서는 저장 즉시 커밋됩니다.</p>
+        <div class="row-actions"><button class="btn xs" id="btn-new">새 글 쓰기</button><button class="btn xs ghost" id="btn-download-posts">posts.json 내려받기</button><button class="btn xs ghost" id="btn-reload-posts">다시 불러오기</button></div>
+      </div>
+      <table><thead><tr><th>제목</th><th>슬러그</th><th>날짜</th><th>태그</th><th style="text-align:right">관리</th></tr></thead><tbody id="post-rows"></tbody></table>
+      <div id="list-status" class="status"></div>
+    </div>
+    <div class="box form" id="postEditBox" hidden>
+      <h2 id="edit-heading">새 글 쓰기</h2>
+      <form id="edit-form">
+        <div class="two">
+          <div><label>제목</label><input type="text" id="f-title" required></div>
+          <div><label>슬러그 <small>(주소에 쓰임. 영문·숫자·하이픈. 비우면 자동)</small></label><input type="text" id="f-slug" placeholder="my-first-post"></div>
+        </div>
+        <div class="two">
+          <div><label>날짜</label><input type="date" id="f-date" required></div>
+          <div><label>작성자 <small>(검색·AI 신뢰 신호)</small></label><input type="text" id="f-author"></div>
+        </div>
+        <label>요약 <small>(목록 카드에 보이는 한두 문장)</small></label><input type="text" id="f-summary">
+        <label>태그 <small>(콤마로 구분)</small></label><input type="text" id="f-tags">
+        <label>본문</label><textarea id="f-body" required></textarea>
+        <div class="help">본문 작성 규칙 (이것만 지원) &bull; 문단: 빈 줄 &bull; 소제목: 줄 앞 <code>## </code> &bull; 목록: 줄 앞 <code>- </code> &bull; 이미지: 한 줄에 <code>![설명](../assets/img/파일.jpg)</code></div>
+        <label>FAQ <small>(선택. 한 줄에 하나, <code>질문 | 답</code>)</small></label><textarea class="short" id="f-faq"></textarea>
+        <label>참고·출처 <small>(선택. 한 줄에 하나, <code>제목 | URL</code>)</small></label><textarea class="short" id="f-sources"></textarea>
+        <div class="row-actions" style="margin-top:16px"><button type="submit" class="btn sm" id="btn-save">저장</button><button type="button" class="btn sm ghost" id="btn-cancel">취소</button></div>
+      </form>
+      <div id="edit-status" class="status"></div>
+    </div>
+  </section>
+
+  <!-- ===== 상품 · 재고 (roastery admin 이식) ===== -->
+  <section class="tab-panel" data-panel="products" hidden>
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <p class="lead" style="margin:0">가격·재고·배지를 고치고 <b>이 브라우저에 저장</b>하면 쇼핑몰 카드에 즉시 반영됩니다(이 브라우저만). 사이트에 반영하려면 <b>products.json 내려받기</b> → <code>shop/products.json</code> 덮어쓰기 → <code>node build.mjs</code>.</p>
+        <div class="row-actions"><button class="btn xs" id="saveProducts">이 브라우저에 저장</button><button class="btn xs ghost" id="addProduct">+ 새 상품</button><button class="btn xs ghost" id="exportJson">products.json 내려받기</button><button class="btn xs ghost" id="ghSaveProducts" hidden>GitHub 에 커밋</button></div>
+      </div>
+      <table><thead><tr><th></th><th>ID</th><th>이름</th><th>카테고리</th><th>가격</th><th>재고</th><th>배지</th><th>대표</th><th>상태</th><th></th></tr></thead><tbody id="productRows"></tbody></table>
+      <p class="help">상세 설명(스토리·특징·스펙·옵션·상세 HTML)은 <code>shop/products.json</code> 또는 <code>shop/details/&lt;id&gt;.html</code> 에서 편집합니다. 에이전트에게는 <code>node scripts/new-product.mjs</code> 를 시키세요.</p>
+    </div>
+  </section>
+
+  <!-- ===== 주문 ===== -->
+  <section class="tab-panel" data-panel="orders" hidden>
+    <div class="box">
+      <p class="lead">상태를 바꾸면 고객의 <b>배송 조회</b> 페이지와 상담봇 답변에 바로 반영됩니다. 실서비스에서는 이 표가 구글 시트이고, 상태 변경 시 알림톡이 나갑니다.</p>
+      <table><thead><tr><th>주문번호</th><th>일시</th><th>고객</th><th>상품</th><th>금액</th><th>상태</th><th>처리</th></tr></thead><tbody id="orderRows"></tbody></table>
+    </div>
+  </section>
+
+  <!-- ===== 문의 ===== -->
+  <section class="tab-panel" data-panel="inq" hidden>
+    <div class="box" id="inqList"></div>
+  </section>
+
+  <!-- ===== 운영 ===== -->
+  <section class="tab-panel" data-panel="ops" hidden>
+    <div class="box"><h2>오늘의 운영 브리핑</h2><p class="lead">주문·재고·문의 데이터를 읽어 오늘 할 일을 뽑습니다. 실서비스에서는 이 요약을 에이전트 예약 작업이 매일 아침 만들어 문자·슬랙으로 보냅니다.</p><div class="ai-box" id="briefing"></div></div>
+    <div class="box"><h2>고객 알림 문구 자동 생성</h2><p class="lead">주문 탭에서 상태를 바꾸면 그 고객에게 보낼 문구가 여기 쌓입니다. (데모: 실제 발송 없음)</p><div id="notiLog" style="font-size:13px"></div></div>
+  </section>
+
+  <!-- ===== GitHub (kit/blog/admin.html 의 토큰 모드) ===== -->
+  <section class="tab-panel" data-panel="github" hidden>
+    <div class="box">
+      <h2>GitHub 토큰으로 바로 커밋하기 (선택)</h2>
+      <p class="lead">연결하면 글 저장 / 상품 "GitHub 에 커밋" 이 저장소의 <code>blog/posts.json</code>, <code>shop/products.json</code> 을 직접 수정하고, Cloudflare Pages 가 <code>node build.mjs</code> 를 돌려 1~2분 안에 재배포합니다.</p>
+      <ol class="guide">
+        <li><a class="text-link" href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a> → <b>Generate new token</b></li>
+        <li>Repository access: "Only select repositories" → 내 사이트 저장소만</li>
+        <li>Permissions → Repository permissions → <b>Contents: Read and write</b></li>
+        <li>Generate token → <code>github_pat_...</code> 복사</li>
+      </ol>
+      <div class="warn">토큰은 이 브라우저의 localStorage 에 <b>평문으로 저장</b>됩니다. 본인 기기·본인 브라우저에서만 쓰고, 공용 PC 에서는 쓰지 마세요.</div>
+      <form id="connect-form" class="form">
+        <div class="two">
+          <div><label>GitHub 토큰</label><input type="password" id="c-token" placeholder="github_pat_..." autocomplete="off"></div>
+          <div><label>저장소 <small>(owner/repo)</small></label><input type="text" id="c-repo" placeholder="내아이디/my-site" autocomplete="off"></div>
+        </div>
+        <div class="two">
+          <div><label>브랜치</label><input type="text" id="c-branch" value="main"></div>
+          <div><label>posts.json 경로</label><input type="text" id="c-path" value="blog/posts.json"></div>
+        </div>
+        <label>products.json 경로</label><input type="text" id="c-ppath" value="shop/products.json">
+        <div class="row-actions" style="margin-top:14px"><button type="submit" class="btn sm">연결하기</button><button type="button" class="btn sm ghost" id="btn-disconnect">연결 해제</button></div>
+      </form>
+      <div id="connect-status" class="status"></div>
+    </div>
+  </section>
+</div>
+
+<script src="../shop/data.js"></script>
+<script src="../shop/shop.js"></script>
+<script>
+(function(){
+  'use strict';
+  var D = SHOP.data(), esc = SHOP.esc, won = SHOP.won;
+  document.getElementById('admTitle').textContent = D.brand.name + ' · 관리자';
+  function $(id){ return document.getElementById(id); }
+  function setStatus(id, type, msg){ var n = $(id); n.className = 'status show ' + type; n.textContent = msg; }
+  function clearStatus(id){ $(id).className = 'status'; $(id).textContent = ''; }
+  function today(){ var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+  function download(name, text){ var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' })); a.download = name; a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000); }
+  function slugify(title){ var s = String(title).toLowerCase().replace(/[^a-z0-9가-힣]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40); return (s || 'post') + '-' + Date.now().toString(36); }
+
+  /* 탭 */
+  $('tabs').addEventListener('click', function(e){ var b = e.target.closest('[data-tab]'); if (!b) return;
+    document.querySelectorAll('[data-tab]').forEach(function(x){ x.classList.toggle('is-active', x===b); });
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.hidden = p.dataset.panel !== b.dataset.tab; }); });
+
+  /* ================= GitHub 모드 (kit/blog/admin.html) ================= */
+  var LS_KEY = 'mysite-admin-github', API = 'https://api.github.com', config = null, shaCache = {};
+  function gh(method, urlPath, body){ return fetch(API + urlPath, { method: method, headers: { 'Authorization': 'Bearer ' + config.token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }, body: body ? JSON.stringify(body) : undefined }); }
+  function b64encode(str){ var bytes = new TextEncoder().encode(str), bin = ''; for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin); }
+  function b64decode(b64){ var bin = atob(b64.replace(/\s/g,'')), bytes = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+  function contentsPath(path){ return '/repos/' + config.repo + '/contents/' + path.split('/').map(encodeURIComponent).join('/'); }
+  function friendlyError(status, detail){
+    if (status === 401) return '토큰이 올바르지 않거나 만료되었습니다. 연결 해제 후 새 토큰으로 다시 연결해 주세요.';
+    if (status === 403) return '권한이 없습니다. 토큰의 Repository access 에 이 저장소가 포함되어 있고 Contents 권한이 Read and write 인지 확인해 주세요.';
+    if (status === 404) return '파일을 찾을 수 없습니다. 저장소 이름(owner/repo), 브랜치, 파일 경로를 확인해 주세요.';
+    return 'GitHub 오류 (' + status + ')' + (detail ? '\n' + detail : '');
+  }
+  function ghLoad(path){
+    return gh('GET', contentsPath(path) + '?ref=' + encodeURIComponent(config.branch)).then(function(r){
+      if (!r.ok) return r.json().catch(function(){ return {}; }).then(function(j){ throw new Error(friendlyError(r.status, j.message)); });
+      return r.json();
+    }).then(function(j){ shaCache[path] = j.sha; try { return JSON.parse(b64decode(j.content)); } catch(e){ throw new Error(path + ' 파싱 실패 — 올바른 JSON 인지 확인해 주세요.'); } });
+  }
+  function ghSave(path, obj, message, isRetry){
+    var body = { message: message, content: b64encode(JSON.stringify(obj, null, 2) + '\n'), sha: shaCache[path], branch: config.branch };
+    return gh('PUT', contentsPath(path), body).then(function(r){
+      if (r.ok) return r.json().then(function(j){ shaCache[path] = j.content && j.content.sha; });
+      return r.json().catch(function(){ return {}; }).then(function(j){
+        var conflict = r.status === 409 || (r.status === 422 && /sha/i.test(j.message || ''));
+        if (conflict && !isRetry) return ghLoad(path).then(function(){ return ghSave(path, obj, message, true); });
+        throw new Error(friendlyError(r.status, j.message));
+      });
+    });
+  }
+  function isGh(){ return !!(config && config.token); }
+  function paintMode(){ $('modeChip').textContent = isGh() ? 'GitHub 모드 · ' + config.repo : '로컬 모드'; $('ghSaveProducts').hidden = !isGh(); }
+  $('connect-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var repo = $('c-repo').value.trim().replace(/^https?:\/\/github\.com\//,'').replace(/\/+$/,'');
+    var cfg = { token: $('c-token').value.trim(), repo: repo, branch: $('c-branch').value.trim() || 'main', path: $('c-path').value.trim().replace(/^\/+/,'') || 'blog/posts.json', ppath: $('c-ppath').value.trim().replace(/^\/+/,'') || 'shop/products.json' };
+    if (!/^[^\/\s]+\/[^\/\s]+$/.test(cfg.repo)) { setStatus('connect-status','err','저장소는 owner/repo 형식으로 입력해 주세요.'); return; }
+    config = cfg; setStatus('connect-status','info','연결 확인 중...');
+    ghLoad(cfg.path).then(function(list){ posts = Array.isArray(list) ? list : []; localStorage.setItem(LS_KEY, JSON.stringify(cfg)); setStatus('connect-status','ok','연결됐어요. 글 ' + posts.length + '편을 불러왔습니다.'); paintMode(); renderPosts(); })
+      .catch(function(err){ config = null; setStatus('connect-status','err', err.message); });
+  });
+  $('btn-disconnect').addEventListener('click', function(){ localStorage.removeItem(LS_KEY); config = null; $('c-token').value=''; paintMode(); setStatus('connect-status','info','연결을 해제했어요. 로컬 모드로 돌아갑니다.'); loadPostsLocal(); });
+
+  /* ================= 글 관리 ================= */
+  var posts = [], editingId = null;
+  function loadPostsLocal(){
+    return fetch('../blog/posts.json', { cache: 'no-store' }).then(function(r){ return r.json(); }).then(function(j){ posts = Array.isArray(j) ? j : []; renderPosts(); })
+      .catch(function(){ posts = []; renderPosts(); setStatus('list-status','err','blog/posts.json 을 읽지 못했어요. 정적 서버(npx serve)로 열었는지 확인해 주세요.'); });
+  }
+  function slugOf(p){ return p.slug || p.id; }
+  function renderPosts(){
+    var sorted = posts.slice().sort(function(a,b){ return String(b.date||'').localeCompare(String(a.date||'')); });
+    $('nPosts').textContent = posts.length;
+    $('post-rows').innerHTML = sorted.length ? sorted.map(function(p){
+      return '<tr><td><b>'+esc(p.title||'(제목 없음)')+'</b></td><td><code>'+esc(slugOf(p))+'</code></td><td>'+esc(p.date||'')+'</td><td>'+(p.tags||[]).map(function(t){ return '<span class="pill">'+esc(t)+'</span> '; }).join('')+'</td><td style="text-align:right"><div class="row-actions" style="justify-content:flex-end"><a class="btn xs ghost" href="../blog/post.html?slug='+encodeURIComponent(slugOf(p))+'" target="_blank">미리보기</a><button class="btn xs ghost" data-edit="'+esc(p.id)+'">수정</button><button class="btn xs ghost" data-del="'+esc(p.id)+'" style="color:var(--red)">삭제</button></div></td></tr>';
+    }).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--ink-2);padding:30px">아직 글이 없습니다. 첫 글을 써보세요.</td></tr>';
+  }
+  function persistPosts(newPosts, message){
+    if (isGh()) { setStatus('list-status','info','GitHub 에 저장하는 중...'); return ghSave(config.path, newPosts, message).then(function(){ posts = newPosts; renderPosts(); setStatus('list-status','ok','저장 완료 — Cloudflare Pages 가 1~2분 안에 자동 재배포합니다.'); }); }
+    posts = newPosts; renderPosts();
+    setStatus('list-status','ok','이 화면에 반영했어요. 사이트에 올리려면 "posts.json 내려받기" → blog/posts.json 덮어쓰기 → node build.mjs → 커밋.');
+    return Promise.resolve();
+  }
+  $('post-rows').addEventListener('click', function(e){
+    var ed = e.target.closest('[data-edit]'), del = e.target.closest('[data-del]');
+    if (ed) openEdit(ed.dataset.edit);
+    if (del) { var p = posts.filter(function(x){ return x.id === del.dataset.del; })[0]; if (p && confirm('"'+(p.title||'')+'" 글을 삭제할까요?')) persistPosts(posts.filter(function(x){ return x.id !== p.id; }), 'post: 삭제 - ' + (p.title||p.id)).catch(function(err){ setStatus('list-status','err', err.message); }); }
+  });
+  $('btn-download-posts').addEventListener('click', function(){ download('posts.json', JSON.stringify(posts, null, 2) + '\n'); });
+  $('btn-reload-posts').addEventListener('click', function(){ clearStatus('list-status'); if (isGh()) ghLoad(config.path).then(function(l){ posts = l; renderPosts(); }).catch(function(err){ setStatus('list-status','err', err.message); }); else loadPostsLocal(); });
+  function openEdit(id){
+    editingId = id || null; clearStatus('edit-status');
+    var p = null; if (id) posts.forEach(function(x){ if (x.id === id) p = x; });
+    $('edit-heading').textContent = p ? '글 수정' : '새 글 쓰기';
+    $('f-title').value = p ? String(p.title||'') : ''; $('f-slug').value = p ? String(p.slug||p.id||'') : '';
+    $('f-date').value = p ? String(p.date||today()) : today(); $('f-summary').value = p ? String(p.summary||'') : '';
+    $('f-tags').value = p && Array.isArray(p.tags) ? p.tags.join(', ') : ''; $('f-body').value = p ? String(p.body||'') : '';
+    $('f-author').value = p ? String(p.author||'') : (localStorage.getItem('mysite-author') || '');
+    $('f-faq').value = p && Array.isArray(p.faq) ? p.faq.map(function(f){ return (f.q||'') + ' | ' + (f.a||''); }).join('\n') : '';
+    $('f-sources').value = p && Array.isArray(p.sources) ? p.sources.map(function(s){ return (s.title||'') + (s.url ? ' | ' + s.url : ''); }).join('\n') : '';
+    $('postListBox').hidden = true; $('postEditBox').hidden = false; window.scrollTo(0,0);
+  }
+  function closeEdit(){ $('postListBox').hidden = false; $('postEditBox').hidden = true; }
+  $('btn-new').addEventListener('click', function(){ openEdit(null); });
+  $('btn-cancel').addEventListener('click', closeEdit);
+  $('edit-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var title = $('f-title').value.trim(), prev = null;
+    if (editingId) posts.forEach(function(x){ if (x.id === editingId) prev = x; });
+    function pairs(text, k1, k2){ return text.split('\n').map(function(l){ return l.trim(); }).filter(Boolean).map(function(l){ var i = l.indexOf('|'); var o = {}; o[k1] = (i < 0 ? l : l.slice(0, i)).trim(); if (i >= 0 && l.slice(i+1).trim()) o[k2] = l.slice(i+1).trim(); return o; }); }
+    var author = $('f-author').value.trim(); if (author) localStorage.setItem('mysite-author', author);
+    var faq = pairs($('f-faq').value, 'q', 'a').filter(function(f){ return f.q && f.a; }), sources = pairs($('f-sources').value, 'title', 'url');
+    var slug = $('f-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') || slugify(title);
+    if (!editingId && posts.some(function(x){ return slugOf(x) === slug; })) { setStatus('edit-status','err','같은 슬러그의 글이 이미 있어요: ' + slug); return; }
+    var post = Object.assign({}, prev || {}, { id: editingId || slug, slug: slug, title: title, date: $('f-date').value || today(), summary: $('f-summary').value.trim(), tags: $('f-tags').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean), body: $('f-body').value.replace(/\r\n/g,'\n').trim() });
+    if (author) post.author = author; else delete post.author;
+    if (faq.length) post.faq = faq; else delete post.faq;
+    if (sources.length) post.sources = sources; else delete post.sources;
+    if (prev && prev.body !== post.body) post.updated = today();
+    var newPosts = editingId ? posts.map(function(x){ return x.id === editingId ? post : x; }) : posts.concat([post]);
+    $('btn-save').disabled = true;
+    persistPosts(newPosts, 'post: ' + title).then(function(){ $('btn-save').disabled = false; closeEdit(); }).catch(function(err){ $('btn-save').disabled = false; setStatus('edit-status','err', err.message); });
+  });
+
+  /* ================= 상품 · 재고 ================= */
+  function paintProducts(){
+    $('productRows').innerHTML = D.products.map(function(p, i){
+      var s = SHOP.stockOf(p.id), cls = s<=0?'out':s<=5?'low':'ok';
+      return '<tr data-i="'+i+'"><td><img class="thumb" src="../'+esc(p.image)+'" alt=""></td><td><input name="id" value="'+esc(p.id)+'" style="width:130px"></td><td><input name="name" value="'+esc(p.name)+'"></td><td><select name="category">'+D.categories.map(function(c){ return '<option value="'+c.id+'"'+(c.id===p.category?' selected':'')+'>'+esc(c.name)+'</option>'; }).join('')+'</select></td><td><input type="number" name="price" value="'+p.price+'" step="100"></td><td><input type="number" name="stock" value="'+s+'"></td><td><input name="badge" value="'+esc(p.badge||'')+'" style="width:100px"></td><td><input type="checkbox" name="featured"'+(p.featured?' checked':'')+'></td><td><span class="pill '+cls+'">'+(s<=0?'품절':s<=5?'소량':'판매중')+'</span></td><td><button class="btn xs ghost" data-delp="'+i+'">삭제</button></td></tr>';
+    }).join('');
+  }
+  function readProductRows(){
+    document.querySelectorAll('#productRows tr').forEach(function(tr){ var p = D.products[+tr.dataset.i]; if (!p) return;
+      p.id = tr.querySelector('[name=id]').value.trim(); p.name = tr.querySelector('[name=name]').value.trim(); p.category = tr.querySelector('[name=category]').value; p.price = +tr.querySelector('[name=price]').value || 0; p.badge = tr.querySelector('[name=badge]').value.trim(); p.featured = tr.querySelector('[name=featured]').checked;
+      var st = +tr.querySelector('[name=stock]').value || 0; p.stock = st; SHOP.setStock(p.id, st); });
+  }
+  function exportProducts(){ var out = { categories: D.categories, options: D.options, products: JSON.parse(JSON.stringify(D.products)), faq: D.faq }; out.products.forEach(function(p){ p.stock = SHOP.stockOf(p.id); }); return out; }
+  $('productRows').addEventListener('click', function(e){ var d = e.target.closest('[data-delp]'); if (d && confirm('이 상품을 목록에서 뺄까요?')) { D.products.splice(+d.dataset.delp, 1); paintProducts(); } });
+  $('addProduct').addEventListener('click', function(){ var id = 'new-'+Date.now().toString(36); D.products.push({ id: id, name: '새 상품', sub: '', category: D.categories[0].id, price: 10000, unit: '', image: 'assets/img/p-'+id+'.svg', tags: [], specs: [], stock: 10, badge: '', featured: false, options: [], story: '', tip: '' }); paintProducts(); });
+  $('saveProducts').addEventListener('click', function(){ readProductRows(); SHOP.saveProducts(D.products); SHOP.toast('이 브라우저에 저장됐어요 — 쇼핑몰 카드에 반영됩니다'); paintAll(); });
+  $('exportJson').addEventListener('click', function(){ readProductRows(); download('products.json', JSON.stringify(exportProducts(), null, 2) + '\n'); });
+  $('ghSaveProducts').addEventListener('click', function(){ readProductRows(); SHOP.toast('GitHub 에 커밋 중...'); ghLoad(config.ppath).then(function(){ return ghSave(config.ppath, exportProducts(), 'products: 관리자 수정'); }).then(function(){ SHOP.toast('커밋 완료 — 1~2분 뒤 재배포'); }).catch(function(err){ alert(err.message); }); });
+
+  /* ================= 주문 ================= */
+  var NEXT = { paid: 'preparing', preparing: 'shipped', shipped: 'delivered' }, NEXT_LABEL = { paid: '준비 시작', preparing: '발송 처리', shipped: '배송 완료' };
+  var B = D.brand.name, notiLog = [];
+  var NOTI = {
+    preparing: function(o){ return '['+B+'] '+o.customer.name+'님, 주문하신 '+o.items[0].name+(o.items.length>1?' 외 '+(o.items.length-1)+'건':'')+'을 준비하고 있어요. 곧 발송합니다.'; },
+    shipped: function(o){ return '['+B+'] '+o.customer.name+'님, 상품이 출발했어요. 영업일 1~2일 안에 도착합니다. 배송 조회: '+location.origin+location.pathname.replace(/admin\/.*$/,'')+'shop/track.html?no='+o.no; },
+    delivered: function(o){ return '['+B+'] '+o.customer.name+'님, 잘 받으셨나요? 불편한 점이 있으면 고객센터로 알려 주세요.'; },
+    cancelled: function(o){ return '['+B+'] '+o.customer.name+'님, 주문 '+o.no+'이 취소됐습니다. 결제는 영업일 3일 내 환불됩니다.'; }
+  };
+  function paintOrders(){
+    var os = SHOP.orders();
+    $('orderRows').innerHTML = os.length ? os.map(function(o){
+      return '<tr><td><b>'+o.no+'</b></td><td>'+new Date(o.at).toLocaleString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})+'</td><td>'+esc(o.customer.name)+'<br><small style="color:var(--ink-2)">'+esc(o.customer.phone)+'</small></td><td>'+o.items.map(function(i){ return esc(i.name)+(i.opt?' <small>('+esc(i.opt)+')</small>':'')+' ×'+i.q; }).join('<br>')+(o.customer.memo?'<br><small style="color:var(--amber-2)">요청: '+esc(o.customer.memo)+'</small>':'')+'</td><td>'+won(o.total)+'</td><td><span class="pill '+o.status+'">'+SHOP.STATUS[o.status]+'</span></td><td><div class="row-actions">'+(NEXT[o.status]?'<button class="btn xs" data-next="'+o.no+'">'+NEXT_LABEL[o.status]+'</button>':'')+(o.status==='paid'?'<button class="btn xs ghost" data-cancel="'+o.no+'">취소</button>':'')+'</div></td></tr>';
+    }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--ink-2);padding:30px">아직 주문이 없어요. 쇼핑몰에서 주문해 보거나 "샘플 주문 5건 넣기"를 누르세요.</td></tr>';
+  }
+  $('orderRows').addEventListener('click', function(e){
+    var n = e.target.closest('[data-next]'), c = e.target.closest('[data-cancel]');
+    if (n) { var o = SHOP.order(n.dataset.next), s = NEXT[o.status]; SHOP.setOrderStatus(o.no, s); notiLog.unshift({ to: o.customer.phone, text: NOTI[s](SHOP.order(o.no)) }); SHOP.toast(SHOP.STATUS[s]+' 처리 · 고객 알림 문구 생성'); paintAll(); }
+    if (c) { if (!confirm('이 주문을 취소할까요? 재고가 복구됩니다.')) return; var o2 = SHOP.order(c.dataset.cancel); o2.items.forEach(function(i){ SHOP.setStock(i.id, SHOP.stockOf(i.id) + i.q); }); SHOP.setOrderStatus(o2.no, 'cancelled'); notiLog.unshift({ to: o2.customer.phone, text: NOTI.cancelled(o2) }); paintAll(); }
+  });
+
+  /* ================= 문의 ================= */
+  function paintInq(){
+    var l = SHOP.inquiries(), T = { order:'주문·배송', product:'상품·추천', exchange:'교환·환불', etc:'기타', restock:'재입고 알림' };
+    $('inqList').innerHTML = l.length ? l.map(function(q){
+      var p = q.product ? SHOP.product(q.product) : null, draft = suggest(q);
+      return '<div style="padding:14px 0;border-bottom:1px solid #edf0f4"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><span class="pill">'+(T[q.type]||q.type)+'</span> <b>'+esc(q.name||'(재입고 알림)')+'</b> <small style="color:var(--ink-2)">'+esc(q.contact||'')+' · '+new Date(q.at).toLocaleString('ko-KR')+(q.orderNo?' · '+esc(q.orderNo):'')+'</small></div><span class="pill '+(q.status==='done'?'shipped':'paid')+'">'+(q.status==='done'?'답변 완료':'대기')+'</span></div>'+
+        '<p style="margin:8px 0">'+esc(q.message)+(p?' — <a href="../shop/products/'+p.id+'.html" target="_blank" style="text-decoration:underline">'+esc(p.name)+'</a>':'')+'</p>'+
+        (q.status==='done' ? '<div class="ai-box" style="background:#f2f7f3;border-color:#9fd1ae"><div class="ai-label" style="color:var(--green)">보낸 답변</div>'+esc(q.answer)+'</div>' :
+        '<div class="ai-box"><div class="ai-label">답변 초안 (데모: 규칙 기반)</div><textarea class="ans" id="ans-'+q.id+'">'+esc(draft)+'</textarea><div class="row-actions" style="margin-top:8px"><button class="btn xs" data-answer="'+q.id+'">이 답변 보내기</button></div></div>')+'</div>';
+    }).join('') : '<p style="color:var(--ink-2);text-align:center;padding:30px">문의가 없어요. 고객센터에서 문의를 남겨 보세요.</p>';
+  }
+  function suggest(q){
+    var m = (q.message||'').toLowerCase();
+    if (q.type === 'restock') { var p = SHOP.product(q.product); return (p?p.name:'해당 상품')+' 재입고되면 가장 먼저 알려드릴게요.'; }
+    var o = q.orderNo && SHOP.order(q.orderNo.toUpperCase());
+    if (o) return q.name+'님, 주문 '+o.no+'은 현재 "'+SHOP.STATUS[o.status]+'" 상태예요. 더 궁금한 점 있으면 답장 주세요.';
+    for (var i=0;i<D.faq.length;i++){ var f = D.faq[i]; var keys = f.q.replace(/[?.]/g,'').split(/\s+/); for (var k=0;k<keys.length;k++){ if (keys[k].length>=2 && m.indexOf(keys[k].toLowerCase())>-1) return q.name+'님, 문의 감사합니다. '+f.a; } }
+    return q.name+'님, 문의 감사합니다. 확인 후 영업일 기준 하루 안에 자세히 답변드리겠습니다.';
+  }
+  $('inqList').addEventListener('click', function(e){ var b = e.target.closest('[data-answer]'); if (!b) return; var a = $('ans-'+b.dataset.answer).value.trim(); if (!a) return; SHOP.answerInquiry(b.dataset.answer, a); SHOP.toast('답변을 보냈어요 (데모: 고객센터 "내 문의"에 표시)'); paintAll(); });
+
+  /* ================= KPI · 브리핑 ================= */
+  function paintKpis(){
+    var os = SHOP.orders(), td = new Date().toDateString();
+    var todayOrders = os.filter(function(o){ return new Date(o.at).toDateString() === td && o.status !== 'cancelled'; });
+    var rev = todayOrders.reduce(function(a,o){ return a + o.total; }, 0);
+    var toPrep = os.filter(function(o){ return o.status === 'paid'; }).length;
+    var low = D.products.filter(function(p){ return SHOP.stockOf(p.id) <= 5; }).length;
+    var openInq = SHOP.inquiries().filter(function(q){ return q.status === 'open'; }).length;
+    $('kpis').innerHTML = '<div class="kpi"><small>오늘 주문</small><strong>'+todayOrders.length+'건 · '+won(rev)+'</strong></div><div class="kpi'+(toPrep?' warn':'')+'"><small>준비 대기 주문</small><strong>'+toPrep+'건</strong></div><div class="kpi'+(low?' warn':'')+'"><small>재고 5개 이하</small><strong>'+low+'종</strong></div><div class="kpi'+(openInq?' warn':'')+'"><small>답변 대기 문의</small><strong>'+openInq+'건</strong></div>';
+    $('nOrders').textContent = toPrep; $('nLow').textContent = low; $('nInq').textContent = openInq;
+  }
+  function paintBrief(){
+    var os = SHOP.orders(), toPrep = os.filter(function(o){ return o.status==='paid'; }), prep = os.filter(function(o){ return o.status==='preparing'; });
+    var low = D.products.filter(function(p){ return SHOP.stockOf(p.id) <= 5; }), openInq = SHOP.inquiries().filter(function(q){ return q.status==='open'; });
+    var lines = ['📅 '+new Date().toLocaleDateString('ko-KR',{month:'long',day:'numeric',weekday:'short'})+' 운영 브리핑', ''];
+    lines.push('📦 준비할 주문: '+(toPrep.length?toPrep.length+'건':'없음'));
+    if (prep.length) lines.push('🚚 오늘 발송할 것: '+prep.length+'건');
+    lines.push('📉 재고 경고: '+(low.length? low.map(function(p){ var s=SHOP.stockOf(p.id); return p.name+' '+(s<=0?'품절':s+'개'); }).join(', ') : '없음'));
+    lines.push('💬 답변 대기 문의: '+openInq.length+'건'+(openInq.length?' → 문의 탭에서 초안 확인':''));
+    lines.push('✍️ 블로그: 글 '+posts.length+'편'+(posts.length? ' · 최근 '+(posts.slice().sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); })[0].date) : ''));
+    lines.push('', '오늘 할 일 순서: 주문 준비 → 발송 처리 → 문의 답변 → 품절 상품 재입고 → 블로그 1편');
+    $('briefing').textContent = lines.join('\n');
+  }
+  function paintNoti(){ $('notiLog').innerHTML = notiLog.length ? notiLog.map(function(n){ return '<div class="summary-line" style="flex-direction:column;align-items:stretch"><small style="color:var(--ink-2)">→ '+esc(n.to)+'</small><span>'+esc(n.text)+'</span></div>'; }).join('') : '<p style="color:var(--ink-2)">아직 생성된 알림이 없어요.</p>'; }
+  function paintAll(){ paintKpis(); paintOrders(); paintProducts(); paintInq(); paintBrief(); paintNoti(); }
+
+  /* 샘플 · 초기화 */
+  $('seed').addEventListener('click', function(){
+    var names = ['김서연','박도윤','이하준','최지우','정민서'], orders = SHOP.orders(), pre = D.brand.orderPrefix || 'OD';
+    for (var i=0;i<5;i++){ var p = D.products[i % D.products.length]; var q = i===2?2:1; var sub = p.price*q; var ship = sub>=D.brand.freeShipping?0:D.brand.shippingFee; var at = new Date(Date.now() - i*3600*1000*7).toISOString(); var st = ['paid','paid','preparing','shipped','delivered'][i];
+      orders.push({ no: pre+'2610'+(24-i)+'-S'+String(i+1).padStart(3,'0'), at: at, status: st, customer: { name: names[i], phone: '010-1234-00'+(10+i), email: '', addr: '서울시 서초구 서초중앙로22길 42 3층', memo: i===4?'문 앞에 두세요':'', pay: '카드' }, items: [{ id: p.id, name: p.name, opt: '', q: q, unit: p.price }], sub: sub, ship: ship, total: sub+ship, history: [{ status:'paid', at: at }].concat(st!=='paid'?[{status:st,at:at}]:[]) });
+      SHOP.setStock(p.id, SHOP.stockOf(p.id) - q); }
+    localStorage.setItem('mysite-orders', JSON.stringify(orders));
+    SHOP.addInquiry({ type:'order', name:'최지우', contact:'010-1234-0013', orderNo: pre+'261021-S004', message:'배송이 얼마나 걸리나요? 선물이라 날짜가 중요해요.' });
+    SHOP.addInquiry({ type:'product', name:'오하늘', contact:'haneul@example.com', orderNo:'', message:'처음인데 뭐가 좋아요?' });
+    SHOP.toast('샘플 주문 5건 · 문의 2건 추가'); paintAll();
+  });
+  $('reset').addEventListener('click', function(){ if (confirm('주문·재고·문의·상품 수정을 모두 지우고 처음 상태로 돌릴까요? (GitHub 연결은 유지)')) { SHOP.resetDemo(); location.reload(); } });
+
+  /* 시작 */
+  (function init(){
+    try { config = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(e){ config = null; }
+    if (config && config.token && config.repo) { $('c-repo').value = config.repo; $('c-branch').value = config.branch; $('c-path').value = config.path; $('c-ppath').value = config.ppath || 'shop/products.json'; paintMode();
+      ghLoad(config.path).then(function(l){ posts = Array.isArray(l) ? l : []; renderPosts(); paintBrief(); }).catch(function(err){ setStatus('list-status','err', err.message); loadPostsLocal(); }); }
+    else { paintMode(); loadPostsLocal().then(paintBrief); }
+    paintAll();
+  })();
+})();
+</script>
+</body>
+</html>

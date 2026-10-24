@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko" data-root="../shop/" data-site="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- kit/blog/index.html 이식. 글 목록은 build.mjs 가 POSTS 마커 안에 HTML 로 직접 굽습니다 (JS 로 불러오지 않음). -->
+<title data-tpl="블로그 | {brand}">블로그 | 온도 로스터스</title>
+<meta name="description" data-tpl="{brand}의 이야기를 기록합니다. 만드는 과정, 가이드, 비하인드." content="온도 로스터스의 이야기를 기록합니다. 만드는 과정, 가이드, 비하인드.">
+<link rel="canonical" data-tpl="{base}blog/" href="https://my-site.pages.dev/blog/">
+<meta property="og:title" data-tpl="블로그 | {brand}" content="블로그 | 온도 로스터스">
+<meta property="og:description" data-tpl="{brand}의 이야기를 기록합니다." content="온도 로스터스의 이야기를 기록합니다.">
+<meta property="og:image" data-tpl="{og}" content="https://my-site.pages.dev/assets/img/og.svg">
+<meta property="og:url" data-tpl="{base}blog/" content="https://my-site.pages.dev/blog/">
+<link rel="alternate" type="application/rss+xml" title="블로그 RSS" href="feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/theme.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<!-- HEADER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<header class="site-header"><div class="wrap">
+  <a class="logo" href="../index.html"><span class="emoji" aria-hidden="true">☕</span><span>온도 로스터스<small>ONDO ROASTERS</small></span></a>
+  <nav class="nav" aria-label="주요 메뉴">
+    <a href="../index.html">홈</a>
+    <a href="../blog/" class="is-current" aria-current="page">블로그</a>
+    <a href="../shop/">스토어</a>
+    <a href="../shop/support.html">고객센터</a>
+    <a href="../shop/track.html">배송 조회</a>
+  </nav>
+  <div class="nav-tools">
+    <button type="button" class="cart-btn" data-cart-open aria-label="장바구니 열기"><span class="t">장바구니</span> <b data-cart-count hidden>0</b></button>
+    <button type="button" class="menu-btn" aria-label="메뉴"><span></span><span></span><span></span></button>
+  </div>
+</div></header>
+<!-- HEADER:END -->
+
+<main class="wrap section" style="padding-top:48px">
+  <p class="eyebrow">Story</p>
+  <h1 class="section-title">브랜드 이야기</h1>
+  <p class="section-lead">만드는 사람들의 기록을 천천히 쌓아갑니다. <a class="text-link" href="feed.xml">RSS</a></p>
+  <ul class="blog-list" style="margin-top:24px">
+<!-- POSTS:START -->
+<li><a href="how-to-store-beans.html" data-post-card="how-to-store-beans"><time datetime="2026-08-28">2026. 8. 28.</time><h2>원두는 냉장고에 넣으면 안 되나요?</h2><p class="summary">보관의 세 가지 원칙과 로스팅 후 3~4주 안에 마셔야 하는 이유.</p><div class="tags"><span class="tag">가이드</span><span class="tag">보관</span></div></a></li>
+<li><a href="first-story.html" data-post-card="first-story"><time datetime="2026-08-20">2026. 8. 20.</time><h2>우리가 이 브랜드를 시작한 이유</h2><p class="summary">작은 불편에서 시작된 고민이 어떻게 하나의 브랜드가 되었는지, 그 첫 마음을 기록합니다.</p><div class="tags"><span class="tag">브랜드</span><span class="tag">시작</span></div></a></li>
+<li><a href="behind-package.html" data-post-card="behind-package"><time datetime="2026-08-14">2026. 8. 14.</time><h2>패키지 하나를 바꾸는 데 석 달이 걸린 이야기</h2><p class="summary">고객의 한 줄 후기에서 시작된 패키지 개선 프로젝트. 사소해 보이는 디테일에 오래 머문 이유를 적었습니다.</p><div class="tags"><span class="tag">비하인드</span><span class="tag">제품</span></div></a></li>
+<!-- POSTS:END -->
+  </ul>
+</main>
+
+<!-- FOOTER:START (build.mjs 가 site.json 으로 다시 씁니다) -->
+<footer class="site-footer"><div class="wrap">
+  <div><div class="logo">☕ 온도 로스터스<small>ONDO ROASTERS</small></div><p style="margin-top:12px">오늘의 온도에 맞는 한 잔</p><p>hello@ondo.example · 010-0000-0000 · 평일 10:00–17:00</p><div class="sns"><a href="https://instagram.com/" target="_blank" rel="noopener">인스타그램</a></div></div>
+  <div><h4>SHOP</h4><a href="../shop/">전체 상품</a><a href="../shop/track.html">배송 조회</a><a href="../shop/support.html">고객센터 · FAQ</a></div>
+  <div><h4>STORY</h4><a href="../blog/">블로그</a><a href="../index.html#about">소개</a><a href="../index.html#contact">연락처</a><a href="../admin/" rel="nofollow">관리자</a></div>
+  <div class="copy"><span>© 2026 ONDO ROASTERS</span><span>결제·주문·재고는 브라우저 안에서만 동작하는 데모입니다</span></div>
+</div></footer>
+<script src="../shop/data.js"></script>
+<script src="../shop/shop.js"></script>
+<!-- FOOTER:END -->
+</body>
+</html>
