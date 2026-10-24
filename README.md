@@ -35,7 +35,7 @@ my-site/
    - `shop.freeShipping`(무료배송 기준), `shop.shippingFee`
    - `baseUrl` 은 배포 후 받은 주소로 (끝에 `/`)
 2. 터미널에서 `node build.mjs` → 모든 페이지의 헤더·푸터·색·제목이 바뀝니다.
-3. `npx serve .` 로 열어 확인합니다 (<http://localhost:3000>). 파일을 더블클릭해 여는 방식(file://)은 블로그 미리보기·관리자가 동작하지 않으니 꼭 서버로 여세요.
+3. `npm run preview` 로 열어 확인합니다 (<http://localhost:4321>). 파일을 더블클릭해 여는 방식(file://)은 블로그 미리보기·관리자가 동작하지 않으니 꼭 서버로 여세요. (`npx serve`는 `.html` 주소를 리다이렉트하면서 주문번호 같은 `?쿼리`를 지우는 경우가 있어 권하지 않습니다.)
 
 ### 2. 배포하기 (Cloudflare Pages, 무료)
 

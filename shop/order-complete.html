@@ -52,7 +52,9 @@
 <!-- FOOTER:END -->
 <script>
 (function(){
-  var no = new URLSearchParams(location.search).get('no'), o = no && SHOP.order(no);
+  // 일부 호스팅은 .html → 깔끔한 주소로 리다이렉트하며 ?no= 를 지운다. sessionStorage 로 보완.
+  var no = new URLSearchParams(location.search).get('no'); if (!no) { try { no = sessionStorage.getItem('mysite-last-order'); } catch (e) {} }
+  var o = no && SHOP.order(no);
   if (!o) { document.getElementById('done').innerHTML = '<p>주문을 찾을 수 없어요.</p><a class="btn" href="index.html">상품 보러 가기</a>'; return; }
   document.getElementById('trackLink').href = 'track.html?no=' + encodeURIComponent(o.no);
   document.getElementById('box').innerHTML = '<dl><dt>주문번호</dt><dd style="font-size:18px;letter-spacing:.04em">'+o.no+'</dd><dt>주문 상품</dt><dd>'+o.items.map(function(i){return SHOP.esc(i.name)+(i.opt?' ('+SHOP.esc(i.opt)+')':'')+' × '+i.q;}).join('<br>')+'</dd><dt>결제 금액</dt><dd>'+SHOP.won(o.total)+' · '+SHOP.esc(o.customer.pay)+'</dd><dt>받는 분</dt><dd>'+SHOP.esc(o.customer.name)+' · '+SHOP.esc(o.customer.phone)+'</dd><dt>배송지</dt><dd>'+SHOP.esc(o.customer.addr)+'</dd>'+(o.customer.memo?'<dt>요청사항</dt><dd>'+SHOP.esc(o.customer.memo)+'</dd>':'')+'<dt>예정</dt><dd>상품 준비 후 영업일 2~3일 내 도착</dd></dl>';

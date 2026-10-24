@@ -141,6 +141,7 @@
     setTimeout(function(){
       var f = form;
       var o = SHOP.placeOrder({ name: f.name.value.trim(), phone: f.phone.value.trim(), email: f.email.value.trim(), zip: f.zip.value.trim(), addr: (f.addr1.value + ' ' + f.addr2.value).trim(), memo: f.memo.value.trim(), pay: METHOD[f.pay.value] });
+      try { sessionStorage.setItem('mysite-last-order', o.no); } catch (e) {}
       location.href = 'order-complete.html?no=' + encodeURIComponent(o.no);
     }, 1400);
   });
